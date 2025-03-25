@@ -11,9 +11,9 @@
     "^@tanstack",
     "^[./].*(?<!\\.(c|le|sc)ss)$",
     "\\.(c|le|sc)ss$",
-    "^~/components",
+    "^@/components",
     "~@?\\w",
-    "^~/(.*)$",
+    "^@/(.*)$",
     "^[./]"
   ],
   "importOrderSeparation": true,

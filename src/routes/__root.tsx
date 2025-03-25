@@ -10,9 +10,9 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 import globalCss from "./globals.css?url";
 
-import { NotFound } from "~/components/not-found";
+import { NotFound } from "@/components/not-found";
 
-import { seo } from "~/util/seo";
+import { seo } from "@/util/seo";
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   {
