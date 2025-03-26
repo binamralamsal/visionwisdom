@@ -11,60 +11,150 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as IndexImport } from './routes/index'
+import { Route as MainRouteImport } from './routes/_main/route'
+import { Route as MainIndexImport } from './routes/_main/index'
+import { Route as MainJobsImport } from './routes/_main/jobs'
+import { Route as MainContactImport } from './routes/_main/contact'
+import { Route as MainAboutImport } from './routes/_main/about'
 
 // Create/Update Routes
 
-const IndexRoute = IndexImport.update({
+const MainRouteRoute = MainRouteImport.update({
+  id: '/_main',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MainIndexRoute = MainIndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => MainRouteRoute,
+} as any)
+
+const MainJobsRoute = MainJobsImport.update({
+  id: '/jobs',
+  path: '/jobs',
+  getParentRoute: () => MainRouteRoute,
+} as any)
+
+const MainContactRoute = MainContactImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => MainRouteRoute,
+} as any)
+
+const MainAboutRoute = MainAboutImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => MainRouteRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_main': {
+      id: '/_main'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof MainRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/_main/about': {
+      id: '/_main/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof MainAboutImport
+      parentRoute: typeof MainRouteImport
+    }
+    '/_main/contact': {
+      id: '/_main/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof MainContactImport
+      parentRoute: typeof MainRouteImport
+    }
+    '/_main/jobs': {
+      id: '/_main/jobs'
+      path: '/jobs'
+      fullPath: '/jobs'
+      preLoaderRoute: typeof MainJobsImport
+      parentRoute: typeof MainRouteImport
+    }
+    '/_main/': {
+      id: '/_main/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof MainIndexImport
+      parentRoute: typeof MainRouteImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface MainRouteRouteChildren {
+  MainAboutRoute: typeof MainAboutRoute
+  MainContactRoute: typeof MainContactRoute
+  MainJobsRoute: typeof MainJobsRoute
+  MainIndexRoute: typeof MainIndexRoute
+}
+
+const MainRouteRouteChildren: MainRouteRouteChildren = {
+  MainAboutRoute: MainAboutRoute,
+  MainContactRoute: MainContactRoute,
+  MainJobsRoute: MainJobsRoute,
+  MainIndexRoute: MainIndexRoute,
+}
+
+const MainRouteRouteWithChildren = MainRouteRoute._addFileChildren(
+  MainRouteRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '': typeof MainRouteRouteWithChildren
+  '/about': typeof MainAboutRoute
+  '/contact': typeof MainContactRoute
+  '/jobs': typeof MainJobsRoute
+  '/': typeof MainIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/about': typeof MainAboutRoute
+  '/contact': typeof MainContactRoute
+  '/jobs': typeof MainJobsRoute
+  '/': typeof MainIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
+  '/_main': typeof MainRouteRouteWithChildren
+  '/_main/about': typeof MainAboutRoute
+  '/_main/contact': typeof MainContactRoute
+  '/_main/jobs': typeof MainJobsRoute
+  '/_main/': typeof MainIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '' | '/about' | '/contact' | '/jobs' | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/about' | '/contact' | '/jobs' | '/'
+  id:
+    | '__root__'
+    | '/_main'
+    | '/_main/about'
+    | '/_main/contact'
+    | '/_main/jobs'
+    | '/_main/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  MainRouteRoute: typeof MainRouteRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  MainRouteRoute: MainRouteRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -77,11 +167,33 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/_main"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
+    "/_main": {
+      "filePath": "_main/route.tsx",
+      "children": [
+        "/_main/about",
+        "/_main/contact",
+        "/_main/jobs",
+        "/_main/"
+      ]
+    },
+    "/_main/about": {
+      "filePath": "_main/about.tsx",
+      "parent": "/_main"
+    },
+    "/_main/contact": {
+      "filePath": "_main/contact.tsx",
+      "parent": "/_main"
+    },
+    "/_main/jobs": {
+      "filePath": "_main/jobs.tsx",
+      "parent": "/_main"
+    },
+    "/_main/": {
+      "filePath": "_main/index.tsx",
+      "parent": "/_main"
     }
   }
 }

@@ -12,6 +12,7 @@ import globalCss from "./globals.css?url";
 
 import { NotFound } from "@/components/not-found";
 
+import { site } from "@/config/site";
 import { seo } from "@/util/seo";
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
@@ -26,9 +27,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           content: "width=device-width, initial-scale=1",
         },
         ...seo({
-          title:
-            "TanStack Start | Type-Safe, Client-First, Full-Stack React Framework",
-          description: `TanStack Start is a type-safe, client-first, full-stack React framework. `,
+          title: site.name,
+          description: site.description,
+          keywords: site.keywords,
         }),
       ],
       links: [
