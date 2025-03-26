@@ -1,4 +1,10 @@
-import { ArrowRightIcon } from "lucide-react";
+import {
+  ArrowRightIcon,
+  CheckIcon,
+  ClockIcon,
+  StarIcon,
+  UsersIcon,
+} from "lucide-react";
 
 import { useEffect, useRef } from "react";
 
@@ -38,9 +44,32 @@ function Home() {
     };
   }, []);
 
+  const stats = [
+    {
+      icon: <CheckIcon className="text-accent h-6 w-6" />,
+      value: "100%",
+      label: "Efficient & Safe",
+    },
+    {
+      icon: <StarIcon className="text-accent h-6 w-6" />,
+      value: "9/10",
+      label: "Client Satisfaction",
+    },
+    {
+      icon: <UsersIcon className="text-accent h-6 w-6" />,
+      value: "5000+",
+      label: "Successful Placements",
+    },
+    {
+      icon: <ClockIcon className="text-accent h-6 w-6" />,
+      value: "10+ Years",
+      label: "Industry Experience",
+    },
+  ];
+
   return (
     <main>
-      <section className="hero-gradient flex items-center pt-20 pb-16">
+      <section className="hero-gradient flex items-center py-14 md:py-20 lg:py-28">
         <div className="container">
           <div className="grid items-center gap-12 md:grid-cols-2">
             <div className="grid gap-6">
@@ -57,7 +86,7 @@ function Home() {
                 <span className="text-primary">Vision</span> in Results
               </h1>
 
-              <p className="appear-animate max-w-[50ch] leading-relaxed text-balance delay-200">
+              <p className="appear-animate max-w-[50ch] text-lg leading-relaxed text-balance delay-200">
                 We&auot;re the trusted choice for manpower needs, connecting top
                 talent with the right opportunities.
               </p>
@@ -99,6 +128,122 @@ function Home() {
                   <p className="text-sm font-medium">
                     Clients reported positive reviews
                   </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-14 md:py-20 lg:py-28">
+        <div className="container">
+          <div className="mb-16 text-center">
+            <span className="bg-primary/10 text-primary appear-animate mb-4 inline-block rounded-full px-3 py-1 text-sm font-medium">
+              About Us
+            </span>
+            <h2 className="font-display appear-animate mb-6 text-3xl font-bold text-balance delay-100 md:text-4xl">
+              Building Futures, One Opportunity at a Time
+            </h2>
+            <p className="text-foreground/80 appear-animate mx-auto max-w-3xl text-lg text-balance delay-200">
+              We provide top-tier staffing solutions, connecting skilled
+              professionals with businesses across industries through expert
+              recruitment, training, and deployment.
+            </p>
+          </div>
+
+          <div className="mb-16 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {stats.map((stat, index) => (
+              <div
+                key={index}
+                className="glass-card appear-animate p-6 text-center"
+                style={{ animationDelay: `${index * 100 + 300}ms` }}
+              >
+                <div className="mb-4 flex justify-center">
+                  <div className="bg-accent/10 flex h-14 w-14 items-center justify-center rounded-full">
+                    {stat.icon}
+                  </div>
+                </div>
+                <h3 className="mb-1 text-2xl font-bold">{stat.value}</h3>
+                <p className="text-foreground/70">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex flex-col items-center gap-12 lg:flex-row">
+            <div className="appear-animate w-full delay-300 lg:w-1/2">
+              <div className="relative">
+                <img
+                  src="/about-home.jpg"
+                  alt="Team meeting"
+                  className="w-full rounded-2xl object-cover shadow-lg"
+                />
+                <div className="glass-card absolute top-4 right-4 z-20 max-w-[240px] p-4">
+                  <h3 className="mb-1 font-bold">
+                    People Love To Work With us
+                  </h3>
+                  <p className="text-foreground/70 text-sm">
+                    Our candidates and clients rate us 4.9/5 on average
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="appear-animate w-full space-y-6 delay-400 lg:w-1/2">
+              <h3 className="font-display text-2xl font-bold">
+                Why Choose Vision Wisdom?
+              </h3>
+
+              <div className="space-y-4">
+                <div className="flex gap-4">
+                  <div className="bg-primary/10 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full">
+                    <CheckIcon className="text-primary h-5 w-5" />
+                  </div>
+                  <div>
+                    <h4 className="mb-1 font-medium">Industry Expertise</h4>
+                    <p className="text-foreground/70">
+                      With deep industry knowledge, we match the right talent to
+                      your specific needs.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="bg-primary/10 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full">
+                    <CheckIcon className="text-primary h-5 w-5" />
+                  </div>
+                  <div>
+                    <h4 className="mb-1 font-medium">Comprehensive Vetting</h4>
+                    <p className="text-foreground/70">
+                      Our rigorous selection process ensures only qualified
+                      professionals join our network.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="bg-primary/10 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full">
+                    <CheckIcon className="text-primary h-5 w-5" />
+                  </div>
+                  <div>
+                    <h4 className="mb-1 font-medium">Global Opportunities</h4>
+                    <p className="text-foreground/70">
+                      We connect talent with opportunities across international
+                      borders.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="bg-primary/10 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full">
+                    <CheckIcon className="text-primary h-5 w-5" />
+                  </div>
+                  <div>
+                    <h4 className="mb-1 font-medium">Ongoing Support</h4>
+                    <p className="text-foreground/70">
+                      We provide continuous assistance to both clients and
+                      candidates throughout the process.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

@@ -28,7 +28,7 @@ export function SiteHeader() {
   return (
     <header
       className={cn(
-        "border-gray-10 border-b-2 py-6",
+        "w-full py-6",
         scrolled &&
           "animate-headerSticky supports-[backdrop-filter]:bg-background/85 sticky top-0 z-50 py-4 shadow-[0_8px_30px_rgb(0,0,0,0.05)] backdrop-blur",
       )}
