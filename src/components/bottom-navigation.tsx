@@ -29,7 +29,7 @@ export function BottomNavigation() {
   ];
 
   return (
-    <div className="bg-background supports-[backdrop-filter]:bg-background/85 sticky bottom-0 left-0 z-50 border-t py-3 backdrop-blur">
+    <div className="bg-background supports-[backdrop-filter]:bg-background/85 sticky bottom-0 left-0 z-50 border-t py-3 backdrop-blur md:hidden">
       <div className="grid grid-cols-4">
         {navItems.map((item) => (
           <Link

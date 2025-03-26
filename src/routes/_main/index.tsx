@@ -2,6 +2,9 @@ import {
   ArrowRightIcon,
   CheckIcon,
   ClockIcon,
+  DollarSignIcon,
+  GlobeIcon,
+  ShieldIcon,
   StarIcon,
   UsersIcon,
 } from "lucide-react";
@@ -64,6 +67,53 @@ function Home() {
       icon: <ClockIcon className="text-accent h-6 w-6" />,
       value: "10+ Years",
       label: "Industry Experience",
+    },
+  ];
+
+  const features = [
+    {
+      icon: <GlobeIcon className="h-5 w-5" />,
+      title: "Global Opportunities",
+      description:
+        "Work in countries across Asia, Europe, Middle East, and North America.",
+    },
+    {
+      icon: <ShieldIcon className="h-5 w-5" />,
+      title: "Safe & Secure",
+      description:
+        "All jobs vetted for legitimacy and compliance with labor laws.",
+    },
+    {
+      icon: <DollarSignIcon className="h-5 w-5" />,
+      title: "Competitive Salaries",
+      description:
+        "Earn above-market rates with comprehensive benefits packages.",
+    },
+    {
+      icon: <ClockIcon className="h-5 w-5" />,
+      title: "Fast Processing",
+      description: "Swift application process with minimal wait times.",
+    },
+  ];
+
+  const jobs = [
+    {
+      title: "Construction Workers",
+      location: "Qatar",
+      salary: "$1,500 - $2,200/month",
+      category: "Construction",
+    },
+    {
+      title: "Registered Nurses",
+      location: "United Kingdom",
+      salary: "$3,500 - $4,500/month",
+      category: "Healthcare",
+    },
+    {
+      title: "IT Specialists",
+      location: "Singapore",
+      salary: "$4,000 - $6,000/month",
+      category: "Technology",
     },
   ];
 
@@ -141,7 +191,7 @@ function Home() {
             <span className="bg-primary/10 text-primary appear-animate mb-4 inline-block rounded-full px-3 py-1 text-sm font-medium">
               About Us
             </span>
-            <h2 className="font-display appear-animate mb-6 text-3xl font-bold text-balance delay-100 md:text-4xl">
+            <h2 className="appear-animate mb-6 text-3xl font-bold text-balance delay-100 md:text-4xl">
               Building Futures, One Opportunity at a Time
             </h2>
             <p className="text-foreground/80 appear-animate mx-auto max-w-3xl text-lg text-balance delay-200">
@@ -189,9 +239,7 @@ function Home() {
             </div>
 
             <div className="appear-animate w-full space-y-6 delay-400 lg:w-1/2">
-              <h3 className="font-display text-2xl font-bold">
-                Why Choose Vision Wisdom?
-              </h3>
+              <h3 className="text-2xl font-bold">Why Choose Vision Wisdom?</h3>
 
               <div className="space-y-4">
                 <div className="flex gap-4">
@@ -251,10 +299,86 @@ function Home() {
         </div>
       </section>
 
+      <section className="bg-secondary py-14 md:py-20 lg:py-28">
+        <div className="container">
+          <div className="mb-16 grid place-items-center text-center">
+            <span className="bg-primary/10 text-primary appear-animate mb-4 rounded-full px-3 py-1 text-sm font-medium">
+              Global Opportunities
+            </span>
+            <h2 className="appear-animate mb-6 text-3xl font-bold text-balance delay-100 md:text-4xl">
+              Wide Range of Jobs Overseas
+            </h2>
+            <p className="text-foreground/80 appear-animate max-w-3xl text-lg text-balance delay-200">
+              We provide safe, lucrative job opportunities across multiple
+              countries. Join us for global career prospects with security and
+              competitive salaries.
+            </p>
+          </div>
+
+          <div className="mb-16 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className="appear-animate rounded-2xl bg-white p-6 shadow-sm"
+                style={{ animationDelay: `${index * 100 + 300}ms` }}
+              >
+                <div className="bg-primary/10 text-primary mb-4 flex h-12 w-12 items-center justify-center rounded-full">
+                  {feature.icon}
+                </div>
+                <h3 className="mb-2 text-lg font-bold">{feature.title}</h3>
+                <p className="text-foreground/70 text-sm">
+                  {feature.description}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="appear-animate mb-12 delay-300">
+            <h3 className="mb-6 text-center text-xl font-bold text-balance md:text-2xl">
+              Featured Job Opportunities
+            </h3>
+
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+              {jobs.map((job, index) => (
+                <div
+                  key={index}
+                  className="glass-card p-6 transition-all hover:shadow-md"
+                >
+                  <span className="bg-primary/10 text-primary mb-4 inline-block rounded-full px-2 py-1 text-xs font-medium">
+                    {job.category}
+                  </span>
+                  <h4 className="mb-1 text-lg font-bold">{job.title}</h4>
+                  <p className="text-foreground/70 mb-3 flex items-center text-sm">
+                    <GlobeIcon className="mr-1 inline h-4 w-4" /> {job.location}
+                  </p>
+                  <p className="text-accent mb-4 font-medium">{job.salary}</p>
+                  <a
+                    href="#"
+                    className="text-primary hover:text-primary/80 inline-flex items-center text-sm font-medium transition-colors"
+                  >
+                    View Details
+                    <ArrowRightIcon className="ml-1 h-4 w-4" />
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="appear-animate flex justify-center delay-400">
+            <Button size="lg" asChild>
+              <Link to="/jobs">
+                View more
+                <ArrowRightIcon className="h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
       <section className="bg-primary text-primary-foreground w-full py-14 md:py-20 lg:py-28">
         <div className="container">
           <div className="grid place-items-center gap-4 text-center">
-            <div className="space-y-2">
+            <div className="appear-animate space-y-2">
               <h2 className="max-w-[25ch] text-3xl leading-tight font-bold tracking-tighter text-balance sm:text-4xl md:text-5xl">
                 Ready to Start Your Global Career Journey?
               </h2>
@@ -263,7 +387,7 @@ function Home() {
                 their careers with Vision Wisdom.
               </p>
             </div>
-            <div className="mt-4 grid grid-cols-2 gap-2">
+            <div className="appear-animate mt-4 grid grid-cols-2 gap-2 delay-100">
               <Button size="lg" variant="secondary" asChild>
                 <Link to="/jobs">Browse Jobs</Link>
               </Button>
