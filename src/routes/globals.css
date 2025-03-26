@@ -148,14 +148,6 @@
       rgba(255, 255, 255, 1) 50%
     );
   }
-
-  .appear-animate {
-    @apply translate-y-4 opacity-0 transition-all duration-700;
-  }
-
-  .appear-animate.in-view {
-    @apply translate-y-0 opacity-100;
-  }
 }
 
 @layer base {

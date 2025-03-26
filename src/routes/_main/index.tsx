@@ -9,8 +9,6 @@ import {
   UsersIcon,
 } from "lucide-react";
 
-import { useEffect, useRef } from "react";
-
 import { Link, createFileRoute } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
@@ -20,33 +18,6 @@ export const Route = createFileRoute("/_main/")({
 });
 
 function Home() {
-  const observerRef = useRef<IntersectionObserver | null>(null);
-
-  useEffect(() => {
-    const options = {
-      root: null,
-      rootMargin: "0px",
-      threshold: 0.1,
-    };
-
-    observerRef.current = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("in-view");
-        }
-      });
-    }, options);
-
-    const elements = document.querySelectorAll(".appear-animate");
-    elements.forEach((el) => observerRef.current?.observe(el));
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, []);
-
   const stats = [
     {
       icon: <CheckIcon className="text-accent h-6 w-6" />,
@@ -123,25 +94,25 @@ function Home() {
         <div className="container">
           <div className="grid items-center gap-12 md:grid-cols-2">
             <div className="grid gap-6">
-              <div className="appear-animate delay-100">
+              <div>
                 <span className="bg-primary/10 text-primary inline-block rounded-full px-3 py-1 text-sm font-medium">
                   Your Confidence, Our Foundation
                 </span>
               </div>
 
-              <h1 className="appear-animate text-4xl font-bold tracking-tight text-balance md:text-5xl lg:text-7xl">
+              <h1 className="text-4xl font-bold tracking-tight text-balance md:text-5xl lg:text-7xl">
                 <span className="block">
                   <span className="text-primary">Wisdom</span> in Staffing,{" "}
                 </span>
                 <span className="text-primary">Vision</span> in Results
               </h1>
 
-              <p className="appear-animate max-w-[50ch] text-lg leading-relaxed text-balance delay-200">
+              <p className="max-w-[50ch] text-lg leading-relaxed text-balance">
                 We&auot;re the trusted choice for manpower needs, connecting top
                 talent with the right opportunities.
               </p>
 
-              <div className="appear-animate flex flex-col gap-2 pt-2 delay-300 sm:flex-row">
+              <div className="flex flex-col gap-2 pt-2 sm:flex-row">
                 <Button size="lg" asChild>
                   <Link to="/jobs">
                     View Jobs
@@ -155,7 +126,7 @@ function Home() {
               </div>
             </div>
 
-            <div className="appear-animate delay-400">
+            <div>
               <div className="relative">
                 <div className="bg-primary/10 absolute top-1/2 left-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full md:h-[400px] md:w-[400px]"></div>
                 <img
@@ -188,13 +159,13 @@ function Home() {
       <section className="py-14 md:py-20 lg:py-28">
         <div className="container">
           <div className="mb-16 text-center">
-            <span className="bg-primary/10 text-primary appear-animate mb-4 inline-block rounded-full px-3 py-1 text-sm font-medium">
+            <span className="bg-primary/10 text-primary mb-4 inline-block rounded-full px-3 py-1 text-sm font-medium">
               About Us
             </span>
-            <h2 className="appear-animate mb-6 text-3xl font-bold text-balance delay-100 md:text-4xl">
+            <h2 className="mb-6 text-3xl font-bold text-balance md:text-4xl">
               Building Futures, One Opportunity at a Time
             </h2>
-            <p className="text-foreground/80 appear-animate mx-auto max-w-3xl text-lg text-balance delay-200">
+            <p className="text-foreground/80 mx-auto max-w-3xl text-lg text-balance">
               We provide top-tier staffing solutions, connecting skilled
               professionals with businesses across industries through expert
               recruitment, training, and deployment.
@@ -205,7 +176,7 @@ function Home() {
             {stats.map((stat, index) => (
               <div
                 key={index}
-                className="glass-card appear-animate p-6 text-center"
+                className="glass-card p-6 text-center"
                 style={{ animationDelay: `${index * 100 + 300}ms` }}
               >
                 <div className="mb-4 flex justify-center">
@@ -220,7 +191,7 @@ function Home() {
           </div>
 
           <div className="flex flex-col items-center gap-12 lg:flex-row">
-            <div className="appear-animate w-full delay-300 lg:w-1/2">
+            <div className="w-full lg:w-1/2">
               <div className="relative">
                 <img
                   src="/about-home.jpg"
@@ -238,7 +209,7 @@ function Home() {
               </div>
             </div>
 
-            <div className="appear-animate w-full space-y-6 delay-400 lg:w-1/2">
+            <div className="w-full space-y-6 lg:w-1/2">
               <h3 className="text-2xl font-bold">Why Choose Vision Wisdom?</h3>
 
               <div className="space-y-4">
@@ -302,13 +273,13 @@ function Home() {
       <section className="bg-secondary py-14 md:py-20 lg:py-28">
         <div className="container">
           <div className="mb-16 grid place-items-center text-center">
-            <span className="bg-primary/10 text-primary appear-animate mb-4 rounded-full px-3 py-1 text-sm font-medium">
+            <span className="bg-primary/10 text-primary mb-4 rounded-full px-3 py-1 text-sm font-medium">
               Global Opportunities
             </span>
-            <h2 className="appear-animate mb-6 text-3xl font-bold text-balance delay-100 md:text-4xl">
+            <h2 className="mb-6 text-3xl font-bold text-balance md:text-4xl">
               Wide Range of Jobs Overseas
             </h2>
-            <p className="text-foreground/80 appear-animate max-w-3xl text-lg text-balance delay-200">
+            <p className="text-foreground/80 max-w-3xl text-lg text-balance">
               We provide safe, lucrative job opportunities across multiple
               countries. Join us for global career prospects with security and
               competitive salaries.
@@ -319,7 +290,7 @@ function Home() {
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="appear-animate rounded-2xl bg-white p-6 shadow-sm"
+                className="rounded-2xl bg-white p-6 shadow-sm"
                 style={{ animationDelay: `${index * 100 + 300}ms` }}
               >
                 <div className="bg-primary/10 text-primary mb-4 flex h-12 w-12 items-center justify-center rounded-full">
@@ -333,7 +304,7 @@ function Home() {
             ))}
           </div>
 
-          <div className="appear-animate mb-12 delay-300">
+          <div className="mb-12">
             <h3 className="mb-6 text-center text-xl font-bold text-balance md:text-2xl">
               Featured Job Opportunities
             </h3>
@@ -364,7 +335,7 @@ function Home() {
             </div>
           </div>
 
-          <div className="appear-animate flex justify-center delay-400">
+          <div className="flex justify-center">
             <Button size="lg" asChild>
               <Link to="/jobs">
                 View more
@@ -378,7 +349,7 @@ function Home() {
       <section className="bg-primary text-primary-foreground w-full py-14 md:py-20 lg:py-28">
         <div className="container">
           <div className="grid place-items-center gap-4 text-center">
-            <div className="appear-animate space-y-2">
+            <div className="space-y-2">
               <h2 className="max-w-[25ch] text-3xl leading-tight font-bold tracking-tighter text-balance sm:text-4xl md:text-5xl">
                 Ready to Start Your Global Career Journey?
               </h2>
@@ -387,7 +358,7 @@ function Home() {
                 their careers with Vision Wisdom.
               </p>
             </div>
-            <div className="appear-animate mt-4 grid grid-cols-2 gap-2 delay-100">
+            <div className="mt-4 grid grid-cols-2 gap-2">
               <Button size="lg" variant="secondary" asChild>
                 <Link to="/jobs">Browse Jobs</Link>
               </Button>
