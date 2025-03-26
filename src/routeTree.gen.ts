@@ -13,9 +13,10 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as MainRouteImport } from './routes/_main/route'
 import { Route as MainIndexImport } from './routes/_main/index'
-import { Route as MainJobsImport } from './routes/_main/jobs'
 import { Route as MainContactImport } from './routes/_main/contact'
 import { Route as MainAboutImport } from './routes/_main/about'
+import { Route as MainJobsIndexImport } from './routes/_main/jobs.index'
+import { Route as MainJobsSlugImport } from './routes/_main/jobs.$slug'
 
 // Create/Update Routes
 
@@ -30,12 +31,6 @@ const MainIndexRoute = MainIndexImport.update({
   getParentRoute: () => MainRouteRoute,
 } as any)
 
-const MainJobsRoute = MainJobsImport.update({
-  id: '/jobs',
-  path: '/jobs',
-  getParentRoute: () => MainRouteRoute,
-} as any)
-
 const MainContactRoute = MainContactImport.update({
   id: '/contact',
   path: '/contact',
@@ -45,6 +40,18 @@ const MainContactRoute = MainContactImport.update({
 const MainAboutRoute = MainAboutImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => MainRouteRoute,
+} as any)
+
+const MainJobsIndexRoute = MainJobsIndexImport.update({
+  id: '/jobs/',
+  path: '/jobs/',
+  getParentRoute: () => MainRouteRoute,
+} as any)
+
+const MainJobsSlugRoute = MainJobsSlugImport.update({
+  id: '/jobs/$slug',
+  path: '/jobs/$slug',
   getParentRoute: () => MainRouteRoute,
 } as any)
 
@@ -73,18 +80,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainContactImport
       parentRoute: typeof MainRouteImport
     }
-    '/_main/jobs': {
-      id: '/_main/jobs'
-      path: '/jobs'
-      fullPath: '/jobs'
-      preLoaderRoute: typeof MainJobsImport
-      parentRoute: typeof MainRouteImport
-    }
     '/_main/': {
       id: '/_main/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof MainIndexImport
+      parentRoute: typeof MainRouteImport
+    }
+    '/_main/jobs/$slug': {
+      id: '/_main/jobs/$slug'
+      path: '/jobs/$slug'
+      fullPath: '/jobs/$slug'
+      preLoaderRoute: typeof MainJobsSlugImport
+      parentRoute: typeof MainRouteImport
+    }
+    '/_main/jobs/': {
+      id: '/_main/jobs/'
+      path: '/jobs'
+      fullPath: '/jobs'
+      preLoaderRoute: typeof MainJobsIndexImport
       parentRoute: typeof MainRouteImport
     }
   }
@@ -95,15 +109,17 @@ declare module '@tanstack/react-router' {
 interface MainRouteRouteChildren {
   MainAboutRoute: typeof MainAboutRoute
   MainContactRoute: typeof MainContactRoute
-  MainJobsRoute: typeof MainJobsRoute
   MainIndexRoute: typeof MainIndexRoute
+  MainJobsSlugRoute: typeof MainJobsSlugRoute
+  MainJobsIndexRoute: typeof MainJobsIndexRoute
 }
 
 const MainRouteRouteChildren: MainRouteRouteChildren = {
   MainAboutRoute: MainAboutRoute,
   MainContactRoute: MainContactRoute,
-  MainJobsRoute: MainJobsRoute,
   MainIndexRoute: MainIndexRoute,
+  MainJobsSlugRoute: MainJobsSlugRoute,
+  MainJobsIndexRoute: MainJobsIndexRoute,
 }
 
 const MainRouteRouteWithChildren = MainRouteRoute._addFileChildren(
@@ -114,15 +130,17 @@ export interface FileRoutesByFullPath {
   '': typeof MainRouteRouteWithChildren
   '/about': typeof MainAboutRoute
   '/contact': typeof MainContactRoute
-  '/jobs': typeof MainJobsRoute
   '/': typeof MainIndexRoute
+  '/jobs/$slug': typeof MainJobsSlugRoute
+  '/jobs': typeof MainJobsIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/about': typeof MainAboutRoute
   '/contact': typeof MainContactRoute
-  '/jobs': typeof MainJobsRoute
   '/': typeof MainIndexRoute
+  '/jobs/$slug': typeof MainJobsSlugRoute
+  '/jobs': typeof MainJobsIndexRoute
 }
 
 export interface FileRoutesById {
@@ -130,22 +148,24 @@ export interface FileRoutesById {
   '/_main': typeof MainRouteRouteWithChildren
   '/_main/about': typeof MainAboutRoute
   '/_main/contact': typeof MainContactRoute
-  '/_main/jobs': typeof MainJobsRoute
   '/_main/': typeof MainIndexRoute
+  '/_main/jobs/$slug': typeof MainJobsSlugRoute
+  '/_main/jobs/': typeof MainJobsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/about' | '/contact' | '/jobs' | '/'
+  fullPaths: '' | '/about' | '/contact' | '/' | '/jobs/$slug' | '/jobs'
   fileRoutesByTo: FileRoutesByTo
-  to: '/about' | '/contact' | '/jobs' | '/'
+  to: '/about' | '/contact' | '/' | '/jobs/$slug' | '/jobs'
   id:
     | '__root__'
     | '/_main'
     | '/_main/about'
     | '/_main/contact'
-    | '/_main/jobs'
     | '/_main/'
+    | '/_main/jobs/$slug'
+    | '/_main/jobs/'
   fileRoutesById: FileRoutesById
 }
 
@@ -175,8 +195,9 @@ export const routeTree = rootRoute
       "children": [
         "/_main/about",
         "/_main/contact",
-        "/_main/jobs",
-        "/_main/"
+        "/_main/",
+        "/_main/jobs/$slug",
+        "/_main/jobs/"
       ]
     },
     "/_main/about": {
@@ -187,12 +208,16 @@ export const routeTree = rootRoute
       "filePath": "_main/contact.tsx",
       "parent": "/_main"
     },
-    "/_main/jobs": {
-      "filePath": "_main/jobs.tsx",
-      "parent": "/_main"
-    },
     "/_main/": {
       "filePath": "_main/index.tsx",
+      "parent": "/_main"
+    },
+    "/_main/jobs/$slug": {
+      "filePath": "_main/jobs.$slug.tsx",
+      "parent": "/_main"
+    },
+    "/_main/jobs/": {
+      "filePath": "_main/jobs.index.tsx",
       "parent": "/_main"
     }
   }

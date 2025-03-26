@@ -10,7 +10,10 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 import globalCss from "./globals.css?url";
 
+import { BottomNavigation } from "@/components/bottom-navigation";
 import { NotFound } from "@/components/not-found";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
 
 import { site } from "@/config/site";
 import { seo } from "@/util/seo";
@@ -64,7 +67,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         { rel: "icon", href: "/favicon.ico" },
       ],
     }),
-    notFoundComponent: () => <NotFound />,
+    notFoundComponent: () => (
+      <>
+        <SiteHeader />
+        <NotFound />
+        <SiteFooter />
+        <BottomNavigation />
+      </>
+    ),
     component: RootComponent,
   },
 );

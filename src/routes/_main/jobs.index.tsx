@@ -9,14 +9,14 @@ import {
 
 import { useState } from "react";
 
-import { createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 import { Job, jobsData } from "@/data/jobs-data";
 
-export const Route = createFileRoute("/_main/jobs")({
+export const Route = createFileRoute("/_main/jobs/")({
   component: RouteComponent,
 });
 
@@ -103,11 +103,13 @@ const JobCard = ({ job }: JobCardProps) => {
   return (
     <Card className="glass-card overflow-hidden hover:shadow-md">
       <div className="relative">
-        <img
-          src={job.image}
-          alt={job.title}
-          className="h-60 w-full object-cover transition-transform duration-500 hover:scale-105"
-        />
+        <Link to="/jobs/$slug" params={{ slug: job.id }}>
+          <img
+            src={job.image}
+            alt={job.title}
+            className="h-60 w-full object-cover transition-transform duration-500 hover:scale-105"
+          />
+        </Link>
         <div className="absolute top-0 right-0 m-3">
           <span className="bg-primary/90 inline-block rounded-full px-3 py-1 text-xs font-medium text-white">
             {job.category}
@@ -116,7 +118,9 @@ const JobCard = ({ job }: JobCardProps) => {
       </div>
 
       <CardContent>
-        <h3 className="mb-4 line-clamp-2 text-xl font-bold">{job.title}</h3>
+        <Link to="/jobs/$slug" params={{ slug: job.id }}>
+          <h3 className="mb-4 line-clamp-2 text-xl font-bold">{job.title}</h3>
+        </Link>
 
         <div className="grid gap-2">
           <div className="text-foreground/70 flex items-center text-sm">
@@ -142,9 +146,11 @@ const JobCard = ({ job }: JobCardProps) => {
       </CardContent>
 
       <CardFooter className="pb-6">
-        <Button className="w-full" variant="default" size="lg">
-          Apply Now
-          <ArrowRightIcon className="ml-2 h-4 w-4" />
+        <Button className="w-full" variant="default" size="lg" asChild>
+          <Link to="/jobs/$slug" params={{ slug: job.id }}>
+            Apply Now
+            <ArrowRightIcon className="ml-2 h-4 w-4" />
+          </Link>
         </Button>
       </CardFooter>
     </Card>

@@ -108,7 +108,7 @@ function Home() {
               </h1>
 
               <p className="max-w-[50ch] text-lg leading-relaxed text-balance">
-                We&auot;re the trusted choice for manpower needs, connecting top
+                We&apos;re the trusted choice for manpower needs, connecting top
                 talent with the right opportunities.
               </p>
 

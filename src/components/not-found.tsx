@@ -1,14 +1,8 @@
 import { Link } from "@tanstack/react-router";
 
-import { BottomNavigation } from "./bottom-navigation";
-import { SiteFooter } from "./site-footer";
-import { SiteHeader } from "./site-header";
-
 export function NotFound() {
   return (
     <>
-      <SiteHeader />
-
       <div className="flex min-h-screen items-center justify-center bg-gray-100">
         <div className="text-center">
           <h1 className="mb-4 text-4xl font-bold">404</h1>
@@ -18,8 +12,6 @@ export function NotFound() {
           </Link>
         </div>
       </div>
-      <SiteFooter />
-      <BottomNavigation />
     </>
   );
 }
