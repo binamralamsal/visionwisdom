@@ -250,6 +250,35 @@ function Home() {
           </div>
         </div>
       </section>
+
+      <section className="bg-primary text-primary-foreground w-full py-14 md:py-20 lg:py-28">
+        <div className="container">
+          <div className="grid place-items-center gap-4 text-center">
+            <div className="space-y-2">
+              <h2 className="max-w-[25ch] text-3xl leading-tight font-bold tracking-tighter text-balance sm:text-4xl md:text-5xl">
+                Ready to Start Your Global Career Journey?
+              </h2>
+              <p className="mx-auto max-w-[40ch] text-balance md:text-lg/relaxed lg:text-base/relaxed xl:text-lg/relaxed">
+                Join thousands of satisfied candidates who have transformed
+                their careers with Vision Wisdom.
+              </p>
+            </div>
+            <div className="mt-4 grid grid-cols-2 gap-2">
+              <Button size="lg" variant="secondary" asChild>
+                <Link to="/jobs">Browse Jobs</Link>
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="bg-transparent"
+                asChild
+              >
+                <Link to="/contact">Contact Us</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
