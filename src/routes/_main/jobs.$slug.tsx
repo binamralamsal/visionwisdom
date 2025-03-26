@@ -11,6 +11,8 @@ import {
   Users,
 } from "lucide-react";
 
+import { useEffect } from "react";
+
 import { Link, createFileRoute } from "@tanstack/react-router";
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -25,6 +27,11 @@ function RouteComponent() {
   const data = Route.useParams();
 
   const job = jobsData.find((job) => job.id === data.slug);
+
+  // Tanstack Router's bug: https://github.com/TanStack/router/issues/3680#issuecomment-2704415487
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
 
   if (!job) {
     return (
