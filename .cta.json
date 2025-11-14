@@ -1,0 +1,23 @@
+{
+  "projectName": "visionwisdom",
+  "mode": "file-router",
+  "typescript": true,
+  "tailwind": true,
+  "packageManager": "bun",
+  "addOnOptions": {},
+  "git": true,
+  "version": 1,
+  "framework": "react-cra",
+  "chosenAddOns": [
+    "eslint",
+    "nitro",
+    "start",
+    "compiler",
+    "form",
+    "oRPC",
+    "shadcn",
+    "t3env",
+    "table",
+    "tanstack-query"
+  ]
+}

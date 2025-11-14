@@ -1,0 +1,57 @@
+import { onError } from "@orpc/server";
+import { OpenAPIHandler } from "@orpc/openapi/fetch";
+import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
+import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
+import { experimental_SmartCoercionPlugin as SmartCoercionPlugin } from "@orpc/json-schema";
+
+import { createFileRoute } from "@tanstack/react-router";
+
+import "@/polyfill";
+import router from "@/orpc/router";
+
+const handler = new OpenAPIHandler(router, {
+  interceptors: [
+    onError((error) => {
+      console.error(error);
+    }),
+  ],
+  plugins: [
+    new SmartCoercionPlugin({
+      schemaConverters: [new ZodToJsonSchemaConverter()],
+    }),
+    new OpenAPIReferencePlugin({
+      schemaConverters: [new ZodToJsonSchemaConverter()],
+      specGenerateOptions: {
+        info: {
+          title: "TanStack ORPC Playground",
+          version: "1.0.0",
+        },
+        commonSchemas: {
+          UndefinedError: { error: "UndefinedError" },
+        },
+      },
+    }),
+  ],
+});
+
+async function handle({ request }: { request: Request }) {
+  const { response } = await handler.handle(request, {
+    prefix: "/api",
+    context: {},
+  });
+
+  return response ?? new Response("Not Found", { status: 404 });
+}
+
+export const Route = createFileRoute("/api/$")({
+  server: {
+    handlers: {
+      HEAD: handle,
+      GET: handle,
+      POST: handle,
+      PUT: handle,
+      PATCH: handle,
+      DELETE: handle,
+    },
+  },
+});
