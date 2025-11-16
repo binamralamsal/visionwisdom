@@ -32,7 +32,7 @@ export function AdminPageWrapper({
 }) {
   return (
     <>
-      <header className="bg-background supports-[backdrop-filter]:bg-background/85 sticky top-0 z-50 flex h-16 shrink-0 items-center justify-between gap-2 p-0 px-4 shadow-[0_8px_30px_rgb(0,0,0,0.05)] backdrop-blur dark:shadow-[0_8px_30px_rgb(255,255,255,0.05)]">
+      <header className="bg-background supports-backdrop-filter:bg-background/85 sticky top-0 z-50 flex h-16 shrink-0 items-center justify-between gap-2 p-0 px-4 shadow-[0_8px_30px_rgb(0,0,0,0.05)] backdrop-blur dark:shadow-[0_8px_30px_rgb(255,255,255,0.05)]">
         <div className="flex items-center gap-2">
           <SidebarTrigger className="-ml-1" type="button" />
           <Separator orientation="vertical" className="mr-2 h-4" />

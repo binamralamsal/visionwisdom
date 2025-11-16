@@ -1,11 +1,12 @@
 import { toast } from "sonner";
 import { LoaderIcon, MoreHorizontal, Trash2Icon } from "lucide-react";
 
-import { Suspense, useId, useState } from "react";
+import { useId, useState } from "react";
 
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import {
   useMutation,
+  useQuery,
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
@@ -71,6 +72,7 @@ import {
 
 import { cn } from "@/util/cn";
 import { api } from "@/orpc/client";
+import { noRetryForNotFound } from "@/util/no-retry-for-not-found";
 import {
   UpdateUserSchemaInput,
   changePasswordClientSchema,
@@ -81,39 +83,36 @@ export const Route = createFileRoute("/admin/users_/$id")({
   component: RouteComponent,
   loader: async ({ context: { queryClient }, params }) => {
     queryClient.prefetchQuery(
-      api.users.admin.get.queryOptions({ input: { params } }),
+      api.users.admin.get.queryOptions({
+        input: { params },
+        retry: noRetryForNotFound,
+      }),
     );
   },
 });
 
 const breadcrumb: BreadcrumbItem[] = [
-  { href: "/admin/users", label: `All Users` },
+  { href: "/admin/users", label: "All Users" },
 ];
 
 function RouteComponent() {
+  const params = Route.useParams();
+  const { isPending, error } = useQuery(
+    api.users.admin.get.queryOptions({
+      input: { params },
+      retry: noRetryForNotFound,
+    }),
+  );
+
+  if (isPending) return <UserDetailsLoading />;
+  if (error) return <NotFoundState />;
+
   return (
     <AdminPageWrapper pageTitle="Edit User" breadcrumbs={breadcrumb}>
-      <Suspense fallback={<UserDetailsLoading />}>
-        <UserAccountDetails />
-      </Suspense>
-    </AdminPageWrapper>
-  );
-}
-
-function UserAccountDetails() {
-  const params = Route.useParams();
-  const { data } = useSuspenseQuery(
-    api.users.admin.get.queryOptions({ input: { params } }),
-  );
-
-  if (!data) return <NotFoundState />;
-
-  return (
-    <>
       <UserDetailsForm />
       <ActiveSessionsTable />
       <DangerZoneCard />
-    </>
+    </AdminPageWrapper>
   );
 }
 
@@ -140,7 +139,7 @@ function UserDetailsLoading() {
   const sidebar = useSidebar();
 
   return (
-    <>
+    <AdminPageWrapper pageTitle="Loading User" breadcrumbs={breadcrumb}>
       <div className="bg-card text-card-foreground container rounded-lg border px-0 shadow">
         <div className="flex flex-col space-y-1.5 p-6">
           <Skeleton className="h-6 w-48" />
@@ -232,7 +231,7 @@ function UserDetailsLoading() {
           </div>
         </div>
       </div>
-    </>
+    </AdminPageWrapper>
   );
 }
 

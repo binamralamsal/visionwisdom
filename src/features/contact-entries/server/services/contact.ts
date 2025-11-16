@@ -3,7 +3,7 @@ import { z } from "zod";
 import {
   contactEntrySchema,
   getAllContactEntriesSchema,
-} from "../contact-entries.schema";
+} from "../../contact-entries.schema";
 
 import { db } from "@/config/db";
 import { bos, orpcInput } from "@/orpc/bos";

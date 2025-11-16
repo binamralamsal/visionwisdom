@@ -14,12 +14,16 @@ export const mos = os.$route({ inputStructure: "detailed" }).errors({
     }),
   },
   NOT_FOUND: {
-    status: 404,
+    status: 403, // TODO: Tanstack Start's Bug doesn't show response error with 404
     message: "Not found",
   },
   INTERNAL_SERVER_ERROR: {
     status: 500,
     message: "Internal server error",
+  },
+  CONFLICT: {
+    status: 409,
+    message: "Conflict",
   },
 });
 

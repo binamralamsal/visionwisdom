@@ -5,6 +5,8 @@
 
 import type { ColumnType } from "kysely";
 
+export type BlogStatus = "archived" | "draft" | "published";
+
 export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   ? ColumnType<S, I | undefined, U>
   : ColumnType<T, T | undefined, T>;
@@ -12,6 +14,30 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
 export type UserRole = "admin" | "user";
+
+export interface BlogCategory {
+  createdAt: Generated<Timestamp>;
+  id: Generated<number>;
+  name: string;
+  slug: string;
+  updatedAt: Generated<Timestamp>;
+}
+
+export interface Blog {
+  authorId: number | null;
+  categoryId: number | null;
+  content: string;
+  coverFileId: number | null;
+  createdAt: Generated<Timestamp>;
+  id: Generated<number>;
+  seoDescription: string | null;
+  seoKeywords: string | null;
+  seoTitle: string | null;
+  slug: string;
+  status: Generated<BlogStatus>;
+  title: string;
+  updatedAt: Generated<Timestamp>;
+}
 
 export interface ContactEntry {
   createdAt: Generated<Timestamp>;
@@ -46,6 +72,14 @@ export interface Session {
   userId: number;
 }
 
+export interface UploadedFile {
+  fileType: string;
+  id: Generated<number>;
+  name: string;
+  uploadedAt: Generated<Timestamp>;
+  url: string;
+}
+
 export interface User {
   createdAt: Generated<Timestamp>;
   id: Generated<number>;
@@ -56,8 +90,11 @@ export interface User {
 }
 
 export interface DB {
+  blogCategories: BlogCategory;
+  blogs: Blog;
   contactEntries: ContactEntry;
   emails: Email;
   sessions: Session;
+  uploadedFiles: UploadedFile;
   users: User;
 }

@@ -13,7 +13,7 @@ async function handle({ request }: { request: Request }) {
     context: {},
   });
 
-  return response ?? new Response("Not Found", { status: 404 });
+  return response ?? Response.json({ message: "Not Found" }, { status: 404 });
 }
 
 export const Route = createFileRoute("/api/rpc/$")({

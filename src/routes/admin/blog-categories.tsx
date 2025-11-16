@@ -1,5 +1,6 @@
-import { Link, createFileRoute } from "@tanstack/react-router";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { createFileRoute } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/data-table/data-table";
@@ -13,19 +14,16 @@ import {
 } from "@/components/ui/card";
 
 import { api } from "@/orpc/client";
-import { getAllUsersSchema } from "@/features/auth/auth.schema";
-import { userTableColumns } from "@/features/auth/components/user-table-columns";
+import { getAllCategoriesSchema } from "@/features/blogs/blogs.schema";
+import { categoriesTableColumns } from "@/features/blogs/components/categories-table-columns";
 
-export const Route = createFileRoute("/admin/users")({
+export const Route = createFileRoute("/admin/blog-categories")({
   component: RouteComponent,
-  validateSearch: getAllUsersSchema,
+  validateSearch: getAllCategoriesSchema,
   loaderDeps: ({ search }) => ({ search }),
   loader: async ({ context, deps: { search } }) => {
     context.queryClient.prefetchQuery(
-      api.users.admin.all.queryOptions({
-        input: { query: search },
-        placeholderData: keepPreviousData,
-      }),
+      api.blogs.categories.all.queryOptions({ input: { query: search } }),
     );
   },
 });
@@ -33,52 +31,32 @@ export const Route = createFileRoute("/admin/users")({
 function RouteComponent() {
   const searchParams = Route.useSearch();
   const { data, isPending } = useQuery(
-    api.users.admin.all.queryOptions({
-      input: { query: searchParams },
-      placeholderData: keepPreviousData,
-    }),
+    api.blogs.categories.all.queryOptions({ input: { query: searchParams } }),
   );
 
   return (
-    <AdminPageWrapper pageTitle="All Users">
+    <AdminPageWrapper pageTitle="All Categories">
       <Card className="container px-0">
         <CardHeader className="flex flex-row items-center justify-between">
           <div className="space-y-2">
-            <CardTitle>Users</CardTitle>
+            <CardTitle className="text-xl">Blog Categories</CardTitle>
             <CardDescription>
-              <p>Here are the list of users</p>
+              <p>Here are the list of blog categories</p>
             </CardDescription>
           </div>
           <Button asChild>
-            <Link to="/admin/users/new">Add new</Link>
+            <Link to="/admin/blog-categories/new">Add new</Link>
           </Button>
         </CardHeader>
         <CardContent>
           <DataTable
-            columns={userTableColumns}
-            data={data?.users || []}
+            columns={categoriesTableColumns}
+            data={data?.categories || []}
             isLoading={isPending}
-            filters={[
-              {
-                accessorKey: "role",
-                queryKey: "role",
-                title: "Roles",
-                options: [
-                  { label: "Admin", value: "admin" },
-                  { label: "Normal User", value: "user" },
-                ],
-              },
-            ]}
             options={{
               pageCount: data?.pagination.totalPages,
               initialState: {
                 columnVisibility: { updatedAt: false },
-                columnFilters: [
-                  {
-                    id: "role",
-                    value: searchParams.role,
-                  },
-                ],
                 sorting: Object.entries(searchParams.sort).map(
                   ([key, value]) => ({
                     desc: value === "desc",
@@ -87,7 +65,7 @@ function RouteComponent() {
                 ),
               },
             }}
-            skeletonColumnWidths={["9%", "20%", "35%", "10%", "18%"]}
+            skeletonColumnWidths={["9%", "30%", "30%", "20%"]}
           />
         </CardContent>
       </Card>
