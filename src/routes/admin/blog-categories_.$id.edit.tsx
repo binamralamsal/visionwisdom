@@ -35,7 +35,6 @@ function RouteComponent() {
       placeholderData: keepPreviousData,
     }),
   );
-  if (!category) return <CategoryNotFound />;
 
   return <CategoryForm defaultValues={category} id={category.id} />;
 }

@@ -1,6 +1,7 @@
 export const navLinks: { label: string; href: string }[] = [
   { label: "Home", href: "/" },
   { label: "Available Jobs", href: "/jobs" },
+  { label: "Blogs", href: "/blogs" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];

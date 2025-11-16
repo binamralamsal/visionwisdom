@@ -13,19 +13,26 @@ import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as MainRouteRouteImport } from './routes/_main/route'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as MainIndexRouteImport } from './routes/_main/index'
+import { Route as ApiUploadRouteImport } from './routes/api.upload'
 import { Route as ApiSplatRouteImport } from './routes/api.$'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminContactEntriesRouteImport } from './routes/admin/contact-entries'
+import { Route as AdminBlogsRouteImport } from './routes/admin/blogs'
 import { Route as AdminBlogCategoriesRouteImport } from './routes/admin/blog-categories'
 import { Route as MainLoginRouteImport } from './routes/_main/login'
 import { Route as MainContactRouteImport } from './routes/_main/contact'
+import { Route as MainBlogsRouteImport } from './routes/_main/blogs'
 import { Route as MainAboutRouteImport } from './routes/_main/about'
 import { Route as MainJobsIndexRouteImport } from './routes/_main/jobs.index'
 import { Route as ApiRpcSplatRouteImport } from './routes/api.rpc.$'
+import { Route as ApiPublicSplatRouteImport } from './routes/api.public.$'
 import { Route as AdminUsersNewRouteImport } from './routes/admin/users_.new'
 import { Route as AdminUsersIdRouteImport } from './routes/admin/users_.$id'
+import { Route as AdminBlogsNewRouteImport } from './routes/admin/blogs_.new'
 import { Route as AdminBlogCategoriesNewRouteImport } from './routes/admin/blog-categories_.new'
 import { Route as MainJobsSlugRouteImport } from './routes/_main/jobs.$slug'
+import { Route as MainBlogsSlugRouteImport } from './routes/_main/blogs_.$slug'
+import { Route as AdminBlogsIdEditRouteImport } from './routes/admin/blogs_.$id.edit'
 import { Route as AdminBlogCategoriesIdEditRouteImport } from './routes/admin/blog-categories_.$id.edit'
 
 const AdminRouteRoute = AdminRouteRouteImport.update({
@@ -47,6 +54,11 @@ const MainIndexRoute = MainIndexRouteImport.update({
   path: '/',
   getParentRoute: () => MainRouteRoute,
 } as any)
+const ApiUploadRoute = ApiUploadRouteImport.update({
+  id: '/api/upload',
+  path: '/api/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiSplatRoute = ApiSplatRouteImport.update({
   id: '/api/$',
   path: '/api/$',
@@ -60,6 +72,11 @@ const AdminUsersRoute = AdminUsersRouteImport.update({
 const AdminContactEntriesRoute = AdminContactEntriesRouteImport.update({
   id: '/contact-entries',
   path: '/contact-entries',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminBlogsRoute = AdminBlogsRouteImport.update({
+  id: '/blogs',
+  path: '/blogs',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminBlogCategoriesRoute = AdminBlogCategoriesRouteImport.update({
@@ -77,6 +94,11 @@ const MainContactRoute = MainContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => MainRouteRoute,
 } as any)
+const MainBlogsRoute = MainBlogsRouteImport.update({
+  id: '/blogs',
+  path: '/blogs',
+  getParentRoute: () => MainRouteRoute,
+} as any)
 const MainAboutRoute = MainAboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -92,6 +114,11 @@ const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
   path: '/api/rpc/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicSplatRoute = ApiPublicSplatRouteImport.update({
+  id: '/api/public/$',
+  path: '/api/public/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminUsersNewRoute = AdminUsersNewRouteImport.update({
   id: '/users_/new',
   path: '/users/new',
@@ -100,6 +127,11 @@ const AdminUsersNewRoute = AdminUsersNewRouteImport.update({
 const AdminUsersIdRoute = AdminUsersIdRouteImport.update({
   id: '/users_/$id',
   path: '/users/$id',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminBlogsNewRoute = AdminBlogsNewRouteImport.update({
+  id: '/blogs_/new',
+  path: '/blogs/new',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminBlogCategoriesNewRoute = AdminBlogCategoriesNewRouteImport.update({
@@ -112,6 +144,16 @@ const MainJobsSlugRoute = MainJobsSlugRouteImport.update({
   path: '/jobs/$slug',
   getParentRoute: () => MainRouteRoute,
 } as any)
+const MainBlogsSlugRoute = MainBlogsSlugRouteImport.update({
+  id: '/blogs_/$slug',
+  path: '/blogs/$slug',
+  getParentRoute: () => MainRouteRoute,
+} as any)
+const AdminBlogsIdEditRoute = AdminBlogsIdEditRouteImport.update({
+  id: '/blogs_/$id/edit',
+  path: '/blogs/$id/edit',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminBlogCategoriesIdEditRoute =
   AdminBlogCategoriesIdEditRouteImport.update({
     id: '/blog-categories_/$id/edit',
@@ -122,125 +164,169 @@ const AdminBlogCategoriesIdEditRoute =
 export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/about': typeof MainAboutRoute
+  '/blogs': typeof MainBlogsRoute
   '/contact': typeof MainContactRoute
   '/login': typeof MainLoginRoute
   '/admin/blog-categories': typeof AdminBlogCategoriesRoute
+  '/admin/blogs': typeof AdminBlogsRoute
   '/admin/contact-entries': typeof AdminContactEntriesRoute
   '/admin/users': typeof AdminUsersRoute
   '/api/$': typeof ApiSplatRoute
+  '/api/upload': typeof ApiUploadRoute
   '/': typeof MainIndexRoute
   '/admin/': typeof AdminIndexRoute
+  '/blogs/$slug': typeof MainBlogsSlugRoute
   '/jobs/$slug': typeof MainJobsSlugRoute
   '/admin/blog-categories/new': typeof AdminBlogCategoriesNewRoute
+  '/admin/blogs/new': typeof AdminBlogsNewRoute
   '/admin/users/$id': typeof AdminUsersIdRoute
   '/admin/users/new': typeof AdminUsersNewRoute
+  '/api/public/$': typeof ApiPublicSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/jobs': typeof MainJobsIndexRoute
   '/admin/blog-categories/$id/edit': typeof AdminBlogCategoriesIdEditRoute
+  '/admin/blogs/$id/edit': typeof AdminBlogsIdEditRoute
 }
 export interface FileRoutesByTo {
   '/about': typeof MainAboutRoute
+  '/blogs': typeof MainBlogsRoute
   '/contact': typeof MainContactRoute
   '/login': typeof MainLoginRoute
   '/admin/blog-categories': typeof AdminBlogCategoriesRoute
+  '/admin/blogs': typeof AdminBlogsRoute
   '/admin/contact-entries': typeof AdminContactEntriesRoute
   '/admin/users': typeof AdminUsersRoute
   '/api/$': typeof ApiSplatRoute
+  '/api/upload': typeof ApiUploadRoute
   '/': typeof MainIndexRoute
   '/admin': typeof AdminIndexRoute
+  '/blogs/$slug': typeof MainBlogsSlugRoute
   '/jobs/$slug': typeof MainJobsSlugRoute
   '/admin/blog-categories/new': typeof AdminBlogCategoriesNewRoute
+  '/admin/blogs/new': typeof AdminBlogsNewRoute
   '/admin/users/$id': typeof AdminUsersIdRoute
   '/admin/users/new': typeof AdminUsersNewRoute
+  '/api/public/$': typeof ApiPublicSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/jobs': typeof MainJobsIndexRoute
   '/admin/blog-categories/$id/edit': typeof AdminBlogCategoriesIdEditRoute
+  '/admin/blogs/$id/edit': typeof AdminBlogsIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_main': typeof MainRouteRouteWithChildren
   '/admin': typeof AdminRouteRouteWithChildren
   '/_main/about': typeof MainAboutRoute
+  '/_main/blogs': typeof MainBlogsRoute
   '/_main/contact': typeof MainContactRoute
   '/_main/login': typeof MainLoginRoute
   '/admin/blog-categories': typeof AdminBlogCategoriesRoute
+  '/admin/blogs': typeof AdminBlogsRoute
   '/admin/contact-entries': typeof AdminContactEntriesRoute
   '/admin/users': typeof AdminUsersRoute
   '/api/$': typeof ApiSplatRoute
+  '/api/upload': typeof ApiUploadRoute
   '/_main/': typeof MainIndexRoute
   '/admin/': typeof AdminIndexRoute
+  '/_main/blogs_/$slug': typeof MainBlogsSlugRoute
   '/_main/jobs/$slug': typeof MainJobsSlugRoute
   '/admin/blog-categories_/new': typeof AdminBlogCategoriesNewRoute
+  '/admin/blogs_/new': typeof AdminBlogsNewRoute
   '/admin/users_/$id': typeof AdminUsersIdRoute
   '/admin/users_/new': typeof AdminUsersNewRoute
+  '/api/public/$': typeof ApiPublicSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/_main/jobs/': typeof MainJobsIndexRoute
   '/admin/blog-categories_/$id/edit': typeof AdminBlogCategoriesIdEditRoute
+  '/admin/blogs_/$id/edit': typeof AdminBlogsIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/admin'
     | '/about'
+    | '/blogs'
     | '/contact'
     | '/login'
     | '/admin/blog-categories'
+    | '/admin/blogs'
     | '/admin/contact-entries'
     | '/admin/users'
     | '/api/$'
+    | '/api/upload'
     | '/'
     | '/admin/'
+    | '/blogs/$slug'
     | '/jobs/$slug'
     | '/admin/blog-categories/new'
+    | '/admin/blogs/new'
     | '/admin/users/$id'
     | '/admin/users/new'
+    | '/api/public/$'
     | '/api/rpc/$'
     | '/jobs'
     | '/admin/blog-categories/$id/edit'
+    | '/admin/blogs/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/about'
+    | '/blogs'
     | '/contact'
     | '/login'
     | '/admin/blog-categories'
+    | '/admin/blogs'
     | '/admin/contact-entries'
     | '/admin/users'
     | '/api/$'
+    | '/api/upload'
     | '/'
     | '/admin'
+    | '/blogs/$slug'
     | '/jobs/$slug'
     | '/admin/blog-categories/new'
+    | '/admin/blogs/new'
     | '/admin/users/$id'
     | '/admin/users/new'
+    | '/api/public/$'
     | '/api/rpc/$'
     | '/jobs'
     | '/admin/blog-categories/$id/edit'
+    | '/admin/blogs/$id/edit'
   id:
     | '__root__'
     | '/_main'
     | '/admin'
     | '/_main/about'
+    | '/_main/blogs'
     | '/_main/contact'
     | '/_main/login'
     | '/admin/blog-categories'
+    | '/admin/blogs'
     | '/admin/contact-entries'
     | '/admin/users'
     | '/api/$'
+    | '/api/upload'
     | '/_main/'
     | '/admin/'
+    | '/_main/blogs_/$slug'
     | '/_main/jobs/$slug'
     | '/admin/blog-categories_/new'
+    | '/admin/blogs_/new'
     | '/admin/users_/$id'
     | '/admin/users_/new'
+    | '/api/public/$'
     | '/api/rpc/$'
     | '/_main/jobs/'
     | '/admin/blog-categories_/$id/edit'
+    | '/admin/blogs_/$id/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   MainRouteRoute: typeof MainRouteRouteWithChildren
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   ApiSplatRoute: typeof ApiSplatRoute
+  ApiUploadRoute: typeof ApiUploadRoute
+  ApiPublicSplatRoute: typeof ApiPublicSplatRoute
   ApiRpcSplatRoute: typeof ApiRpcSplatRoute
 }
 
@@ -274,6 +360,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainIndexRouteImport
       parentRoute: typeof MainRouteRoute
     }
+    '/api/upload': {
+      id: '/api/upload'
+      path: '/api/upload'
+      fullPath: '/api/upload'
+      preLoaderRoute: typeof ApiUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/$': {
       id: '/api/$'
       path: '/api/$'
@@ -293,6 +386,13 @@ declare module '@tanstack/react-router' {
       path: '/contact-entries'
       fullPath: '/admin/contact-entries'
       preLoaderRoute: typeof AdminContactEntriesRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/blogs': {
+      id: '/admin/blogs'
+      path: '/blogs'
+      fullPath: '/admin/blogs'
+      preLoaderRoute: typeof AdminBlogsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/blog-categories': {
@@ -316,6 +416,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainContactRouteImport
       parentRoute: typeof MainRouteRoute
     }
+    '/_main/blogs': {
+      id: '/_main/blogs'
+      path: '/blogs'
+      fullPath: '/blogs'
+      preLoaderRoute: typeof MainBlogsRouteImport
+      parentRoute: typeof MainRouteRoute
+    }
     '/_main/about': {
       id: '/_main/about'
       path: '/about'
@@ -337,6 +444,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiRpcSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/$': {
+      id: '/api/public/$'
+      path: '/api/public/$'
+      fullPath: '/api/public/$'
+      preLoaderRoute: typeof ApiPublicSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/users_/new': {
       id: '/admin/users_/new'
       path: '/users/new'
@@ -349,6 +463,13 @@ declare module '@tanstack/react-router' {
       path: '/users/$id'
       fullPath: '/admin/users/$id'
       preLoaderRoute: typeof AdminUsersIdRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/blogs_/new': {
+      id: '/admin/blogs_/new'
+      path: '/blogs/new'
+      fullPath: '/admin/blogs/new'
+      preLoaderRoute: typeof AdminBlogsNewRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/blog-categories_/new': {
@@ -365,6 +486,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainJobsSlugRouteImport
       parentRoute: typeof MainRouteRoute
     }
+    '/_main/blogs_/$slug': {
+      id: '/_main/blogs_/$slug'
+      path: '/blogs/$slug'
+      fullPath: '/blogs/$slug'
+      preLoaderRoute: typeof MainBlogsSlugRouteImport
+      parentRoute: typeof MainRouteRoute
+    }
+    '/admin/blogs_/$id/edit': {
+      id: '/admin/blogs_/$id/edit'
+      path: '/blogs/$id/edit'
+      fullPath: '/admin/blogs/$id/edit'
+      preLoaderRoute: typeof AdminBlogsIdEditRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/blog-categories_/$id/edit': {
       id: '/admin/blog-categories_/$id/edit'
       path: '/blog-categories/$id/edit'
@@ -377,18 +512,22 @@ declare module '@tanstack/react-router' {
 
 interface MainRouteRouteChildren {
   MainAboutRoute: typeof MainAboutRoute
+  MainBlogsRoute: typeof MainBlogsRoute
   MainContactRoute: typeof MainContactRoute
   MainLoginRoute: typeof MainLoginRoute
   MainIndexRoute: typeof MainIndexRoute
+  MainBlogsSlugRoute: typeof MainBlogsSlugRoute
   MainJobsSlugRoute: typeof MainJobsSlugRoute
   MainJobsIndexRoute: typeof MainJobsIndexRoute
 }
 
 const MainRouteRouteChildren: MainRouteRouteChildren = {
   MainAboutRoute: MainAboutRoute,
+  MainBlogsRoute: MainBlogsRoute,
   MainContactRoute: MainContactRoute,
   MainLoginRoute: MainLoginRoute,
   MainIndexRoute: MainIndexRoute,
+  MainBlogsSlugRoute: MainBlogsSlugRoute,
   MainJobsSlugRoute: MainJobsSlugRoute,
   MainJobsIndexRoute: MainJobsIndexRoute,
 }
@@ -399,24 +538,30 @@ const MainRouteRouteWithChildren = MainRouteRoute._addFileChildren(
 
 interface AdminRouteRouteChildren {
   AdminBlogCategoriesRoute: typeof AdminBlogCategoriesRoute
+  AdminBlogsRoute: typeof AdminBlogsRoute
   AdminContactEntriesRoute: typeof AdminContactEntriesRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminBlogCategoriesNewRoute: typeof AdminBlogCategoriesNewRoute
+  AdminBlogsNewRoute: typeof AdminBlogsNewRoute
   AdminUsersIdRoute: typeof AdminUsersIdRoute
   AdminUsersNewRoute: typeof AdminUsersNewRoute
   AdminBlogCategoriesIdEditRoute: typeof AdminBlogCategoriesIdEditRoute
+  AdminBlogsIdEditRoute: typeof AdminBlogsIdEditRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminBlogCategoriesRoute: AdminBlogCategoriesRoute,
+  AdminBlogsRoute: AdminBlogsRoute,
   AdminContactEntriesRoute: AdminContactEntriesRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminBlogCategoriesNewRoute: AdminBlogCategoriesNewRoute,
+  AdminBlogsNewRoute: AdminBlogsNewRoute,
   AdminUsersIdRoute: AdminUsersIdRoute,
   AdminUsersNewRoute: AdminUsersNewRoute,
   AdminBlogCategoriesIdEditRoute: AdminBlogCategoriesIdEditRoute,
+  AdminBlogsIdEditRoute: AdminBlogsIdEditRoute,
 }
 
 const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
@@ -427,6 +572,8 @@ const rootRouteChildren: RootRouteChildren = {
   MainRouteRoute: MainRouteRouteWithChildren,
   AdminRouteRoute: AdminRouteRouteWithChildren,
   ApiSplatRoute: ApiSplatRoute,
+  ApiUploadRoute: ApiUploadRoute,
+  ApiPublicSplatRoute: ApiPublicSplatRoute,
   ApiRpcSplatRoute: ApiRpcSplatRoute,
 }
 export const routeTree = rootRouteImport

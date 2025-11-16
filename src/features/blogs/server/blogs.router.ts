@@ -1,4 +1,12 @@
 import {
+  deleteBlog,
+  getAllBlogs,
+  getBlogById,
+  getBlogBySlug,
+  newBlog,
+  updateBlog,
+} from "./services/blogs";
+import {
   deleteCategory,
   getAllCategories,
   getCategoryById,
@@ -12,6 +20,12 @@ export const blogs = bos
   .prefix("/blogs")
   .tag("Blogs")
   .router({
+    new: newBlog,
+    update: updateBlog,
+    delete: deleteBlog,
+    all: getAllBlogs,
+    get: getBlogById,
+    getBySlug: getBlogBySlug,
     categories: {
       delete: deleteCategory,
       all: getAllCategories,

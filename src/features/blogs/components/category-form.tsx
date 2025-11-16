@@ -121,7 +121,7 @@ export function CategoryForm(props: {
                 Add a new category by entering suitable name, and slug.
               </CardDescription>
             </CardHeader>
-            <CardContent className="grid items-start gap-6 md:grid-cols-2">
+            <CardContent>
               <form.FormGroup className="grid items-start gap-6 md:grid-cols-2">
                 <form.AppField
                   name="name"

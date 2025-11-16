@@ -85,7 +85,7 @@ export const Route = createFileRoute("/admin/users_/$id")({
     queryClient.prefetchQuery(
       api.users.admin.get.queryOptions({
         input: { params },
-        retry: noRetryForNotFound,
+        retry: false,
       }),
     );
   },

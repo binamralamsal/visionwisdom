@@ -72,7 +72,7 @@ export const updateCategory = bos
   });
 
 export const getAllCategories = bos
-  .route({ method: "GET", path: "/all" })
+  .route({ method: "GET", path: "/" })
   .input(orpcInput({ query: getAllCategoriesSchema }))
   .handler(async ({ input: { query } }) => {
     const { sort, page, pageSize, search } = query;
@@ -160,7 +160,7 @@ export const getCategoryById = bos
   );
 
 export const deleteCategory = bos
-  .route({ method: "POST", path: "/{id}/delete" })
+  .route({ method: "DELETE", path: "/{id}" })
   .input(orpcInput({ params: z.object({ id: z.coerce.number().int() }) }))
   .use(ensureAdmin)
   .handler(

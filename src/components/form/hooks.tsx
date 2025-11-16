@@ -11,7 +11,7 @@ import { Field, FieldDescription, FieldGroup } from "../ui/field";
 const { fieldContext, formContext, useFieldContext, useFormContext } =
   createFormHookContexts();
 
-const { useAppForm } = createFormHook({
+const { useAppForm, withForm } = createFormHook({
   fieldComponents: {
     FormField,
     FormLabel,
@@ -30,4 +30,4 @@ const { useAppForm } = createFormHook({
   formContext,
 });
 
-export { useAppForm, useFieldContext, useFormContext };
+export { useAppForm, useFieldContext, useFormContext, withForm };

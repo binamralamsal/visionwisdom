@@ -5,6 +5,7 @@ import { getCookie } from "@tanstack/react-start/server";
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 
 import { AdminSidebar } from "@/components/admin-sidebar";
+import { ConfirmProvider } from "@/components/confirm-alert";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 import { api } from "@/orpc/client";
@@ -48,7 +49,9 @@ function RouteComponent() {
       <SidebarProvider defaultOpen={defaultOpen}>
         <AdminSidebar />
         <SidebarInset>
-          <Outlet />
+          <ConfirmProvider>
+            <Outlet />
+          </ConfirmProvider>
         </SidebarInset>
       </SidebarProvider>
     </ThemeProvider>
