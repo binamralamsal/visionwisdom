@@ -11,6 +11,10 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   ? ColumnType<S, I | undefined, U>
   : ColumnType<T, T | undefined, T>;
 
+export type JobGender = "any" | "female" | "male";
+
+export type JobStatus = "archived" | "closed" | "draft" | "published";
+
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
 export type UserRole = "admin" | "user";
@@ -59,6 +63,34 @@ export interface Email {
   userId: number;
 }
 
+export interface JobCategory {
+  createdAt: Generated<Timestamp>;
+  id: Generated<number>;
+  name: string;
+  slug: string;
+  updatedAt: Generated<Timestamp>;
+}
+
+export interface Job {
+  categoryId: number | null;
+  company: string | null;
+  contractLength: string | null;
+  createdAt: Generated<Timestamp>;
+  description: string;
+  documentsRequired: string | null;
+  experience: string | null;
+  fileId: number | null;
+  gender: Generated<JobGender>;
+  id: Generated<number>;
+  location: string | null;
+  salary: string | null;
+  slug: string;
+  status: Generated<JobStatus>;
+  title: string;
+  updatedAt: Generated<Timestamp>;
+  workingHours: string | null;
+}
+
 export interface Session {
   city: string | null;
   country: Generated<string>;
@@ -94,6 +126,8 @@ export interface DB {
   blogs: Blog;
   contactEntries: ContactEntry;
   emails: Email;
+  jobCategories: JobCategory;
+  jobs: Job;
   sessions: Session;
   uploadedFiles: UploadedFile;
   users: User;

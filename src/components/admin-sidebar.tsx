@@ -1,5 +1,6 @@
 import {
   BoxesIcon,
+  BriefcaseIcon,
   ChevronRightIcon,
   Contact2Icon,
   FilePlus2Icon,
@@ -7,6 +8,7 @@ import {
   LayoutDashboardIcon,
   NewspaperIcon,
   PackagePlusIcon,
+  TicketPlusIcon,
   UserPlusIcon,
   UsersIcon,
 } from "lucide-react";
@@ -118,6 +120,43 @@ export const sidebarItems: SidebarGroupItem[] = [
             title: "Add New Blog",
             url: "/admin/blogs/new",
             icon: FilePlus2Icon,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    label: "Job Management",
+    items: [
+      {
+        title: "Job Categories",
+        url: "/admin/job-categories",
+        icon: BoxesIcon,
+        exact: false,
+        items: [
+          {
+            title: "All Categories",
+            url: "/admin/job-categories",
+            icon: BoxesIcon,
+          },
+          {
+            title: "Add New Category",
+            url: "/admin/job-categories/new",
+            icon: PackagePlusIcon,
+          },
+        ],
+      },
+      {
+        title: "Jobs",
+        url: "/admin/jobs",
+        icon: BriefcaseIcon,
+        exact: false,
+        items: [
+          { title: "All Jobs", url: "/admin/jobs", icon: BriefcaseIcon },
+          {
+            title: "Add New Job",
+            url: "/admin/jobs/new",
+            icon: TicketPlusIcon,
           },
         ],
       },

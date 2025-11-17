@@ -1,7 +1,10 @@
 import pg from "pg";
 import { z } from "zod";
 
-import { categorySchema, getAllCategoriesSchema } from "../../blogs.schema";
+import {
+  getAllJobCategoriesSchema,
+  jobCategorySchema,
+} from "../../jobs.schema";
 
 import { db } from "@/config/db";
 import { bos, orpcInput } from "@/orpc/bos";
@@ -9,17 +12,17 @@ import { ensureAdmin } from "@/orpc/middlewares/ensure-admin";
 
 const { DatabaseError } = pg;
 
-export const newCategory = bos
+export const newJobCategory = bos
   .route({ method: "POST", path: "/" })
   .input(
     orpcInput({
-      body: categorySchema,
+      body: jobCategorySchema,
     }),
   )
   .use(ensureAdmin)
   .handler(async ({ input: { body }, errors }) => {
     try {
-      await db.insertInto("blogCategories").values(body).execute();
+      await db.insertInto("jobCategories").values(body).execute();
       return { message: "Created category successfully!" };
     } catch (err) {
       if (err instanceof DatabaseError && err.code === "23505") {
@@ -34,23 +37,23 @@ export const newCategory = bos
     }
   });
 
-export const updateCategory = bos
+export const updateJobCategory = bos
   .route({ method: "PUT", path: "/{id}" })
   .input(
     orpcInput({
       params: z.object({
         id: z.coerce.number().int().positive(),
       }),
-      body: categorySchema,
+      body: jobCategorySchema,
     }),
   )
   .use(ensureAdmin)
   .handler(async ({ input: { params, body }, errors }) => {
     try {
       await db
-        .updateTable("blogCategories")
+        .updateTable("jobCategories")
         .set(body)
-        .where("blogCategories.id", "=", params.id)
+        .where("jobCategories.id", "=", params.id)
         .execute();
 
       return { message: "Updated category successfully!" };
@@ -67,21 +70,21 @@ export const updateCategory = bos
     }
   });
 
-export const getAllCategories = bos
+export const getAllJobCategories = bos
   .route({ method: "GET", path: "/" })
-  .input(orpcInput({ query: getAllCategoriesSchema }))
+  .input(orpcInput({ query: getAllJobCategoriesSchema }))
   .handler(async ({ input: { query } }) => {
     const { sort, page, pageSize, search } = query;
 
     function createBaseQuery() {
-      let query = db.selectFrom("blogCategories");
+      let query = db.selectFrom("jobCategories");
 
       if (search?.trim()) {
         const searchTerm = `%${search.trim()}%`;
         query = query.where((eb) =>
           eb.or([
-            eb("blogCategories.name", "ilike", searchTerm),
-            eb("blogCategories.slug", "ilike", searchTerm),
+            eb("jobCategories.name", "ilike", searchTerm),
+            eb("jobCategories.slug", "ilike", searchTerm),
           ]),
         );
       }
@@ -129,7 +132,7 @@ export const getAllCategories = bos
     };
   });
 
-export const getCategoryById = bos
+export const getJobCategoryById = bos
   .route({ method: "GET", path: "/{id}" })
   .input(
     orpcInput({ params: z.object({ id: z.coerce.number().int().positive() }) }),
@@ -142,7 +145,7 @@ export const getCategoryById = bos
       errors,
     }) => {
       const result = await db
-        .selectFrom("blogCategories")
+        .selectFrom("jobCategories")
         .selectAll()
         .where("id", "=", id)
         .executeTakeFirst();
@@ -155,7 +158,7 @@ export const getCategoryById = bos
     },
   );
 
-export const deleteCategory = bos
+export const deleteJobCategory = bos
   .route({ method: "DELETE", path: "/{id}" })
   .input(orpcInput({ params: z.object({ id: z.coerce.number().int() }) }))
   .use(ensureAdmin)
@@ -166,8 +169,8 @@ export const deleteCategory = bos
       },
     }) => {
       await db
-        .deleteFrom("blogCategories")
-        .where("blogCategories.id", "=", id)
+        .deleteFrom("jobCategories")
+        .where("jobCategories.id", "=", id)
         .execute();
 
       return { message: "Deleted category successfully!" };

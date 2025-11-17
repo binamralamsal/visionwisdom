@@ -14,14 +14,17 @@ import { site } from "@/config/site";
 export const Route = createFileRoute("/_main/blogs_/$slug")({
   component: RouteComponent,
   loader: async ({ params: { slug }, context: { queryClient } }) => {
-    const blog = await queryClient.ensureQueryData(
-      api.blogs.getBySlug.queryOptions({
-        input: { params: { slug } },
-      }),
-    );
-    if (!blog) throw notFound();
+    try {
+      const blogs = await queryClient.ensureQueryData(
+        api.blogs.getBySlug.queryOptions({
+          input: { params: { slug } },
+        }),
+      );
 
-    return blog;
+      return blogs;
+    } catch {
+      throw notFound();
+    }
   },
   head: ({ loaderData }) => ({
     meta: [

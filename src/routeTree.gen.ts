@@ -16,6 +16,8 @@ import { Route as MainIndexRouteImport } from './routes/_main/index'
 import { Route as ApiUploadRouteImport } from './routes/api.upload'
 import { Route as ApiSplatRouteImport } from './routes/api.$'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
+import { Route as AdminJobsRouteImport } from './routes/admin/jobs'
+import { Route as AdminJobCategoriesRouteImport } from './routes/admin/job-categories'
 import { Route as AdminContactEntriesRouteImport } from './routes/admin/contact-entries'
 import { Route as AdminBlogsRouteImport } from './routes/admin/blogs'
 import { Route as AdminBlogCategoriesRouteImport } from './routes/admin/blog-categories'
@@ -28,10 +30,14 @@ import { Route as ApiRpcSplatRouteImport } from './routes/api.rpc.$'
 import { Route as ApiPublicSplatRouteImport } from './routes/api.public.$'
 import { Route as AdminUsersNewRouteImport } from './routes/admin/users_.new'
 import { Route as AdminUsersIdRouteImport } from './routes/admin/users_.$id'
+import { Route as AdminJobsNewRouteImport } from './routes/admin/jobs_.new'
+import { Route as AdminJobCategoriesNewRouteImport } from './routes/admin/job-categories_.new'
 import { Route as AdminBlogsNewRouteImport } from './routes/admin/blogs_.new'
 import { Route as AdminBlogCategoriesNewRouteImport } from './routes/admin/blog-categories_.new'
 import { Route as MainJobsSlugRouteImport } from './routes/_main/jobs.$slug'
 import { Route as MainBlogsSlugRouteImport } from './routes/_main/blogs_.$slug'
+import { Route as AdminJobsIdEditRouteImport } from './routes/admin/jobs_.$id.edit'
+import { Route as AdminJobCategoriesIdEditRouteImport } from './routes/admin/job-categories_.$id.edit'
 import { Route as AdminBlogsIdEditRouteImport } from './routes/admin/blogs_.$id.edit'
 import { Route as AdminBlogCategoriesIdEditRouteImport } from './routes/admin/blog-categories_.$id.edit'
 
@@ -67,6 +73,16 @@ const ApiSplatRoute = ApiSplatRouteImport.update({
 const AdminUsersRoute = AdminUsersRouteImport.update({
   id: '/users',
   path: '/users',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminJobsRoute = AdminJobsRouteImport.update({
+  id: '/jobs',
+  path: '/jobs',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminJobCategoriesRoute = AdminJobCategoriesRouteImport.update({
+  id: '/job-categories',
+  path: '/job-categories',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminContactEntriesRoute = AdminContactEntriesRouteImport.update({
@@ -129,6 +145,16 @@ const AdminUsersIdRoute = AdminUsersIdRouteImport.update({
   path: '/users/$id',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminJobsNewRoute = AdminJobsNewRouteImport.update({
+  id: '/jobs_/new',
+  path: '/jobs/new',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminJobCategoriesNewRoute = AdminJobCategoriesNewRouteImport.update({
+  id: '/job-categories_/new',
+  path: '/job-categories/new',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminBlogsNewRoute = AdminBlogsNewRouteImport.update({
   id: '/blogs_/new',
   path: '/blogs/new',
@@ -149,6 +175,17 @@ const MainBlogsSlugRoute = MainBlogsSlugRouteImport.update({
   path: '/blogs/$slug',
   getParentRoute: () => MainRouteRoute,
 } as any)
+const AdminJobsIdEditRoute = AdminJobsIdEditRouteImport.update({
+  id: '/jobs_/$id/edit',
+  path: '/jobs/$id/edit',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminJobCategoriesIdEditRoute =
+  AdminJobCategoriesIdEditRouteImport.update({
+    id: '/job-categories_/$id/edit',
+    path: '/job-categories/$id/edit',
+    getParentRoute: () => AdminRouteRoute,
+  } as any)
 const AdminBlogsIdEditRoute = AdminBlogsIdEditRouteImport.update({
   id: '/blogs_/$id/edit',
   path: '/blogs/$id/edit',
@@ -170,6 +207,8 @@ export interface FileRoutesByFullPath {
   '/admin/blog-categories': typeof AdminBlogCategoriesRoute
   '/admin/blogs': typeof AdminBlogsRoute
   '/admin/contact-entries': typeof AdminContactEntriesRoute
+  '/admin/job-categories': typeof AdminJobCategoriesRoute
+  '/admin/jobs': typeof AdminJobsRoute
   '/admin/users': typeof AdminUsersRoute
   '/api/$': typeof ApiSplatRoute
   '/api/upload': typeof ApiUploadRoute
@@ -179,6 +218,8 @@ export interface FileRoutesByFullPath {
   '/jobs/$slug': typeof MainJobsSlugRoute
   '/admin/blog-categories/new': typeof AdminBlogCategoriesNewRoute
   '/admin/blogs/new': typeof AdminBlogsNewRoute
+  '/admin/job-categories/new': typeof AdminJobCategoriesNewRoute
+  '/admin/jobs/new': typeof AdminJobsNewRoute
   '/admin/users/$id': typeof AdminUsersIdRoute
   '/admin/users/new': typeof AdminUsersNewRoute
   '/api/public/$': typeof ApiPublicSplatRoute
@@ -186,6 +227,8 @@ export interface FileRoutesByFullPath {
   '/jobs': typeof MainJobsIndexRoute
   '/admin/blog-categories/$id/edit': typeof AdminBlogCategoriesIdEditRoute
   '/admin/blogs/$id/edit': typeof AdminBlogsIdEditRoute
+  '/admin/job-categories/$id/edit': typeof AdminJobCategoriesIdEditRoute
+  '/admin/jobs/$id/edit': typeof AdminJobsIdEditRoute
 }
 export interface FileRoutesByTo {
   '/about': typeof MainAboutRoute
@@ -195,6 +238,8 @@ export interface FileRoutesByTo {
   '/admin/blog-categories': typeof AdminBlogCategoriesRoute
   '/admin/blogs': typeof AdminBlogsRoute
   '/admin/contact-entries': typeof AdminContactEntriesRoute
+  '/admin/job-categories': typeof AdminJobCategoriesRoute
+  '/admin/jobs': typeof AdminJobsRoute
   '/admin/users': typeof AdminUsersRoute
   '/api/$': typeof ApiSplatRoute
   '/api/upload': typeof ApiUploadRoute
@@ -204,6 +249,8 @@ export interface FileRoutesByTo {
   '/jobs/$slug': typeof MainJobsSlugRoute
   '/admin/blog-categories/new': typeof AdminBlogCategoriesNewRoute
   '/admin/blogs/new': typeof AdminBlogsNewRoute
+  '/admin/job-categories/new': typeof AdminJobCategoriesNewRoute
+  '/admin/jobs/new': typeof AdminJobsNewRoute
   '/admin/users/$id': typeof AdminUsersIdRoute
   '/admin/users/new': typeof AdminUsersNewRoute
   '/api/public/$': typeof ApiPublicSplatRoute
@@ -211,6 +258,8 @@ export interface FileRoutesByTo {
   '/jobs': typeof MainJobsIndexRoute
   '/admin/blog-categories/$id/edit': typeof AdminBlogCategoriesIdEditRoute
   '/admin/blogs/$id/edit': typeof AdminBlogsIdEditRoute
+  '/admin/job-categories/$id/edit': typeof AdminJobCategoriesIdEditRoute
+  '/admin/jobs/$id/edit': typeof AdminJobsIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -223,6 +272,8 @@ export interface FileRoutesById {
   '/admin/blog-categories': typeof AdminBlogCategoriesRoute
   '/admin/blogs': typeof AdminBlogsRoute
   '/admin/contact-entries': typeof AdminContactEntriesRoute
+  '/admin/job-categories': typeof AdminJobCategoriesRoute
+  '/admin/jobs': typeof AdminJobsRoute
   '/admin/users': typeof AdminUsersRoute
   '/api/$': typeof ApiSplatRoute
   '/api/upload': typeof ApiUploadRoute
@@ -232,6 +283,8 @@ export interface FileRoutesById {
   '/_main/jobs/$slug': typeof MainJobsSlugRoute
   '/admin/blog-categories_/new': typeof AdminBlogCategoriesNewRoute
   '/admin/blogs_/new': typeof AdminBlogsNewRoute
+  '/admin/job-categories_/new': typeof AdminJobCategoriesNewRoute
+  '/admin/jobs_/new': typeof AdminJobsNewRoute
   '/admin/users_/$id': typeof AdminUsersIdRoute
   '/admin/users_/new': typeof AdminUsersNewRoute
   '/api/public/$': typeof ApiPublicSplatRoute
@@ -239,6 +292,8 @@ export interface FileRoutesById {
   '/_main/jobs/': typeof MainJobsIndexRoute
   '/admin/blog-categories_/$id/edit': typeof AdminBlogCategoriesIdEditRoute
   '/admin/blogs_/$id/edit': typeof AdminBlogsIdEditRoute
+  '/admin/job-categories_/$id/edit': typeof AdminJobCategoriesIdEditRoute
+  '/admin/jobs_/$id/edit': typeof AdminJobsIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -251,6 +306,8 @@ export interface FileRouteTypes {
     | '/admin/blog-categories'
     | '/admin/blogs'
     | '/admin/contact-entries'
+    | '/admin/job-categories'
+    | '/admin/jobs'
     | '/admin/users'
     | '/api/$'
     | '/api/upload'
@@ -260,6 +317,8 @@ export interface FileRouteTypes {
     | '/jobs/$slug'
     | '/admin/blog-categories/new'
     | '/admin/blogs/new'
+    | '/admin/job-categories/new'
+    | '/admin/jobs/new'
     | '/admin/users/$id'
     | '/admin/users/new'
     | '/api/public/$'
@@ -267,6 +326,8 @@ export interface FileRouteTypes {
     | '/jobs'
     | '/admin/blog-categories/$id/edit'
     | '/admin/blogs/$id/edit'
+    | '/admin/job-categories/$id/edit'
+    | '/admin/jobs/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/about'
@@ -276,6 +337,8 @@ export interface FileRouteTypes {
     | '/admin/blog-categories'
     | '/admin/blogs'
     | '/admin/contact-entries'
+    | '/admin/job-categories'
+    | '/admin/jobs'
     | '/admin/users'
     | '/api/$'
     | '/api/upload'
@@ -285,6 +348,8 @@ export interface FileRouteTypes {
     | '/jobs/$slug'
     | '/admin/blog-categories/new'
     | '/admin/blogs/new'
+    | '/admin/job-categories/new'
+    | '/admin/jobs/new'
     | '/admin/users/$id'
     | '/admin/users/new'
     | '/api/public/$'
@@ -292,6 +357,8 @@ export interface FileRouteTypes {
     | '/jobs'
     | '/admin/blog-categories/$id/edit'
     | '/admin/blogs/$id/edit'
+    | '/admin/job-categories/$id/edit'
+    | '/admin/jobs/$id/edit'
   id:
     | '__root__'
     | '/_main'
@@ -303,6 +370,8 @@ export interface FileRouteTypes {
     | '/admin/blog-categories'
     | '/admin/blogs'
     | '/admin/contact-entries'
+    | '/admin/job-categories'
+    | '/admin/jobs'
     | '/admin/users'
     | '/api/$'
     | '/api/upload'
@@ -312,6 +381,8 @@ export interface FileRouteTypes {
     | '/_main/jobs/$slug'
     | '/admin/blog-categories_/new'
     | '/admin/blogs_/new'
+    | '/admin/job-categories_/new'
+    | '/admin/jobs_/new'
     | '/admin/users_/$id'
     | '/admin/users_/new'
     | '/api/public/$'
@@ -319,6 +390,8 @@ export interface FileRouteTypes {
     | '/_main/jobs/'
     | '/admin/blog-categories_/$id/edit'
     | '/admin/blogs_/$id/edit'
+    | '/admin/job-categories_/$id/edit'
+    | '/admin/jobs_/$id/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -379,6 +452,20 @@ declare module '@tanstack/react-router' {
       path: '/users'
       fullPath: '/admin/users'
       preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/jobs': {
+      id: '/admin/jobs'
+      path: '/jobs'
+      fullPath: '/admin/jobs'
+      preLoaderRoute: typeof AdminJobsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/job-categories': {
+      id: '/admin/job-categories'
+      path: '/job-categories'
+      fullPath: '/admin/job-categories'
+      preLoaderRoute: typeof AdminJobCategoriesRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/contact-entries': {
@@ -465,6 +552,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersIdRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/jobs_/new': {
+      id: '/admin/jobs_/new'
+      path: '/jobs/new'
+      fullPath: '/admin/jobs/new'
+      preLoaderRoute: typeof AdminJobsNewRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/job-categories_/new': {
+      id: '/admin/job-categories_/new'
+      path: '/job-categories/new'
+      fullPath: '/admin/job-categories/new'
+      preLoaderRoute: typeof AdminJobCategoriesNewRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/blogs_/new': {
       id: '/admin/blogs_/new'
       path: '/blogs/new'
@@ -492,6 +593,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/blogs/$slug'
       preLoaderRoute: typeof MainBlogsSlugRouteImport
       parentRoute: typeof MainRouteRoute
+    }
+    '/admin/jobs_/$id/edit': {
+      id: '/admin/jobs_/$id/edit'
+      path: '/jobs/$id/edit'
+      fullPath: '/admin/jobs/$id/edit'
+      preLoaderRoute: typeof AdminJobsIdEditRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/job-categories_/$id/edit': {
+      id: '/admin/job-categories_/$id/edit'
+      path: '/job-categories/$id/edit'
+      fullPath: '/admin/job-categories/$id/edit'
+      preLoaderRoute: typeof AdminJobCategoriesIdEditRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
     '/admin/blogs_/$id/edit': {
       id: '/admin/blogs_/$id/edit'
@@ -540,28 +655,40 @@ interface AdminRouteRouteChildren {
   AdminBlogCategoriesRoute: typeof AdminBlogCategoriesRoute
   AdminBlogsRoute: typeof AdminBlogsRoute
   AdminContactEntriesRoute: typeof AdminContactEntriesRoute
+  AdminJobCategoriesRoute: typeof AdminJobCategoriesRoute
+  AdminJobsRoute: typeof AdminJobsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminBlogCategoriesNewRoute: typeof AdminBlogCategoriesNewRoute
   AdminBlogsNewRoute: typeof AdminBlogsNewRoute
+  AdminJobCategoriesNewRoute: typeof AdminJobCategoriesNewRoute
+  AdminJobsNewRoute: typeof AdminJobsNewRoute
   AdminUsersIdRoute: typeof AdminUsersIdRoute
   AdminUsersNewRoute: typeof AdminUsersNewRoute
   AdminBlogCategoriesIdEditRoute: typeof AdminBlogCategoriesIdEditRoute
   AdminBlogsIdEditRoute: typeof AdminBlogsIdEditRoute
+  AdminJobCategoriesIdEditRoute: typeof AdminJobCategoriesIdEditRoute
+  AdminJobsIdEditRoute: typeof AdminJobsIdEditRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminBlogCategoriesRoute: AdminBlogCategoriesRoute,
   AdminBlogsRoute: AdminBlogsRoute,
   AdminContactEntriesRoute: AdminContactEntriesRoute,
+  AdminJobCategoriesRoute: AdminJobCategoriesRoute,
+  AdminJobsRoute: AdminJobsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminBlogCategoriesNewRoute: AdminBlogCategoriesNewRoute,
   AdminBlogsNewRoute: AdminBlogsNewRoute,
+  AdminJobCategoriesNewRoute: AdminJobCategoriesNewRoute,
+  AdminJobsNewRoute: AdminJobsNewRoute,
   AdminUsersIdRoute: AdminUsersIdRoute,
   AdminUsersNewRoute: AdminUsersNewRoute,
   AdminBlogCategoriesIdEditRoute: AdminBlogCategoriesIdEditRoute,
   AdminBlogsIdEditRoute: AdminBlogsIdEditRoute,
+  AdminJobCategoriesIdEditRoute: AdminJobCategoriesIdEditRoute,
+  AdminJobsIdEditRoute: AdminJobsIdEditRoute,
 }
 
 const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(

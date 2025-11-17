@@ -7,7 +7,7 @@ import { useStore } from "@tanstack/react-form";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { CategorySchema, categorySchema } from "../blogs.schema";
+import { JobCategorySchema, jobCategorySchema } from "../jobs.schema";
 
 import { Button } from "@/components/ui/button";
 import { AdminPageWrapper } from "@/components/admin-page-wrapper";
@@ -24,18 +24,18 @@ import {
 import { api } from "@/orpc/client";
 import { slugify } from "@/util/slugify";
 
-export function CategoryForm(props: {
+export function JobCategoryForm(props: {
   id?: number;
-  defaultValues?: CategorySchema;
+  defaultValues?: JobCategorySchema;
 }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const createCategoryMutation = useMutation(
-    api.blogs.categories.new.mutationOptions({
+    api.jobs.categories.new.mutationOptions({
       onSuccess: (response) => {
         toast.success(response.message);
-        navigate({ to: "/admin/blog-categories" });
+        navigate({ to: "/admin/job-categories" });
       },
       onError: (error) => {
         toast.error(error.message);
@@ -44,12 +44,12 @@ export function CategoryForm(props: {
   );
 
   const updateCategoryMutation = useMutation(
-    api.blogs.categories.update.mutationOptions({
+    api.jobs.categories.update.mutationOptions({
       onSuccess: async (response) => {
         toast.success(response.message);
         if (props.id) {
           await queryClient.invalidateQueries(
-            api.blogs.categories.get.queryOptions({
+            api.jobs.categories.get.queryOptions({
               input: { params: { id: props.id } },
             }),
           );
@@ -67,9 +67,9 @@ export function CategoryForm(props: {
       ({
         name: "",
         slug: "",
-      } as CategorySchema),
+      } as JobCategorySchema),
     validators: {
-      onChange: categorySchema,
+      onChange: jobCategorySchema,
     },
     onSubmit: async ({ value: body }) => {
       if (props.id) {
@@ -109,7 +109,7 @@ export function CategoryForm(props: {
         <FormNavigationBlocker />
         <AdminPageWrapper
           breadcrumbs={[
-            { label: "All Categories", href: "/admin/blog-categories" },
+            { label: "All Categories", href: "/admin/job-categories" },
           ]}
           pageTitle={pageTitle}
           rightSideContent={<ActionButtons isEditing={!!props.id} />}
@@ -171,7 +171,7 @@ function ActionButtons({ isEditing }: { isEditing?: boolean }) {
   return (
     <>
       <Button variant="outline" size="sm" type="button" asChild>
-        <Link to="/admin/blog-categories">Discard</Link>
+        <Link to="/admin/job-categories">Discard</Link>
       </Button>
       <Button size="sm" type="submit" disabled={isSubmitting}>
         {isSubmitting && <LoaderCircleIcon className="animate-spin" />}
