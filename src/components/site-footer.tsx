@@ -9,8 +9,18 @@ import {
 } from "lucide-react";
 
 import { Link } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
+
+import { api } from "@/orpc/client";
 
 export function SiteFooter() {
+  const {
+    data: { categories },
+  } = useSuspenseQuery(
+    api.jobs.categories.all.queryOptions({
+      input: { query: { page: 1, pageSize: 6 } },
+    }),
+  );
   return (
     <footer
       id="contact"
@@ -95,46 +105,17 @@ export function SiteFooter() {
           <div>
             <h3 className="mb-6 text-lg font-bold">Job Categories</h3>
             <ul className="space-y-3">
-              <li>
-                <a
-                  href="#"
-                  className="hover:text-primary-foreground text-primary-foreground/80 transition-colors"
-                >
-                  Healthcare
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="hover:text-primary-foreground text-primary-foreground/80 transition-colors"
-                >
-                  Construction
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="hover:text-primary-foreground text-primary-foreground/80 transition-colors"
-                >
-                  Technology
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="hover:text-primary-foreground text-primary-foreground/80 transition-colors"
-                >
-                  Hospitality
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="hover:text-primary-foreground text-primary-foreground/80 transition-colors"
-                >
-                  Manufacturing
-                </a>
-              </li>
+              {categories.map((cat) => (
+                <li key={cat.id}>
+                  <Link
+                    to="/jobs"
+                    search={{ categories: [cat.slug] }}
+                    className="hover:text-primary-foreground text-primary-foreground/80 transition-colors"
+                  >
+                    {cat.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 

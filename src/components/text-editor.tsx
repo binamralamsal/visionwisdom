@@ -1,5 +1,4 @@
 import z from "zod";
-import { link } from "node:fs/promises";
 import Link from "@tiptap/extension-link";
 import StarterKit from "@tiptap/starter-kit";
 import TiptapImage from "@tiptap/extension-image";
@@ -27,6 +26,7 @@ import {
   UnderlineIcon,
   UndoIcon,
   UnlinkIcon,
+  VideoIcon,
 } from "lucide-react";
 
 import { FormEvent, ReactNode, useState } from "react";
@@ -35,6 +35,7 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Toggle } from "./ui/toggle";
 import { useAppForm } from "./form/hooks";
+import { YoutubeVideo } from "./youtube-video";
 import { FileUpload, FileUploader } from "./file-upload";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import {
@@ -57,6 +58,7 @@ const extensions = [
   Link.configure({ openOnClick: false }),
   Highlight.configure(),
   TiptapImage,
+  YoutubeVideo,
 ];
 
 export function TextEditor({
@@ -404,6 +406,11 @@ export function Toolbar({
           <ImageIcon className="h-4 w-4" />
         </Toggle>
       </ImageComponent>
+      <YoutubeComponent editor={editor}>
+        <Button size="icon-sm" variant="ghost" aria-label="Insert YouTube">
+          <VideoIcon className="h-4 w-4" />
+        </Button>
+      </YoutubeComponent>
 
       <div className="bg-border mx-1 h-6 w-px" />
 
@@ -519,5 +526,150 @@ export function BubbleMenu({ editor }: { editor: Editor }) {
         </Button>
       )}
     </TiptapBubbleMenu>
+  );
+}
+
+function normalizeYoutubeUrlFromUrlString(urlStr: string): string | null {
+  try {
+    const url = new URL(urlStr);
+    const host = url.hostname.replace(/^www\./i, "").toLowerCase();
+
+    if (host === "youtube.com" || host.endsWith(".youtube.com")) {
+      const v = url.searchParams.get("v");
+      if (v) return `https://www.youtube.com/watch?v=${v}`;
+
+      const embedMatch = url.pathname.match(/\/embed\/([A-Za-z0-9_-]{6,11})/);
+      if (embedMatch) return `https://www.youtube.com/watch?v=${embedMatch[1]}`;
+    }
+
+    if (host === "youtu.be") {
+      const id = url.pathname.replace(/^\/+/, "");
+      if (id) return `https://www.youtube.com/watch?v=${id}`;
+    }
+  } catch {}
+
+  const regexId = urlStr.match(
+    /(?:v=|\/embed\/|youtu\.be\/|\/watch\?v=)([A-Za-z0-9_-]{6,11})/,
+  );
+  if (regexId) return `https://www.youtube.com/watch?v=${regexId[1]}`;
+
+  return null;
+}
+
+function isYoutubeHost(urlStr: string): boolean {
+  try {
+    const { hostname } = new URL(urlStr);
+    const host = hostname.replace(/^www\./i, "").toLowerCase();
+    return (
+      host === "youtu.be" ||
+      host === "youtube.com" ||
+      host.endsWith(".youtube.com")
+    );
+  } catch {
+    return false;
+  }
+}
+
+const schema = z.object({
+  youtube: z
+    .string()
+    .min(1, "URL is required")
+    .max(2048, "URL is too long")
+    .url("Please enter a valid URL")
+    .refine((val) => isYoutubeHost(val), {
+      message: "Please enter a YouTube URL (youtube.com or youtu.be)",
+    })
+    .transform((val) => {
+      const normalized = normalizeYoutubeUrlFromUrlString(val);
+      return normalized ?? val;
+    }),
+});
+
+type YoutubeComponentProps = {
+  editor: Editor;
+  children: ReactNode;
+};
+
+export function YoutubeComponent({ editor, children }: YoutubeComponentProps) {
+  const [open, setOpen] = useState(false);
+
+  const form = useAppForm({
+    defaultValues: { youtube: "" },
+    validators: {
+      onChange: schema,
+    },
+    onSubmit: ({ value: { youtube } }) => {
+      editor
+        .chain()
+        .focus()
+        .insertContent({
+          type: "youtubeVideo",
+          attrs: { src: youtube },
+        })
+        .run();
+
+      setOpen(false);
+      form.reset();
+    },
+  });
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>{children}</PopoverTrigger>
+
+      <PopoverContent className="w-80 p-4" role="dialog" aria-modal="false">
+        <form
+          className="flex flex-col gap-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+            form.handleSubmit();
+          }}
+        >
+          <form.AppField
+            name="youtube"
+            children={(field) => (
+              <field.FormField>
+                <field.FormLabel asChild>
+                  <h3 className="font-medium">Insert YouTube Video</h3>
+                </field.FormLabel>
+
+                <field.FormInput
+                  type="url"
+                  placeholder="https://youtube.com/watch?v=..."
+                  required
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      form.handleSubmit();
+                    }
+                  }}
+                />
+
+                <field.FormError id="youtube-error" />
+              </field.FormField>
+            )}
+          />
+
+          <div className="flex justify-between">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                setOpen(false);
+              }}
+            >
+              Cancel
+            </Button>
+
+            <Button type="submit" aria-label="Insert YouTube video">
+              <span className="flex items-center gap-2">
+                <VideoIcon className="h-4 w-4" />
+                Insert
+              </span>
+            </Button>
+          </div>
+        </form>
+      </PopoverContent>
+    </Popover>
   );
 }

@@ -6,6 +6,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, createFileRoute, notFound } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
+import { RenderTextEditorContent } from "@/components/render-text-editor-content";
 
 import { seo } from "@/util/seo";
 import { api } from "@/orpc/client";
@@ -187,10 +188,9 @@ function RouteComponent() {
         </div>
       </header>
 
-      <article
-        className="prose prose-lg max-w-none"
-        dangerouslySetInnerHTML={{ __html: blog.content }}
-      ></article>
+      <article className="prose prose-lg max-w-none">
+        <RenderTextEditorContent html={blog.content} />
+      </article>
 
       <div className="my-16">
         <div className="border-border border-t"></div>

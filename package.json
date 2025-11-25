@@ -61,6 +61,7 @@
     "@tiptap/extension-image": "^3.10.7",
     "@tiptap/react": "^3.10.7",
     "@tiptap/starter-kit": "^3.10.7",
+    "@vidstack/react": "^1.12.13",
     "argon2": "^0.44.0",
     "axios": "^1.13.2",
     "class-variance-authority": "^0.7.1",

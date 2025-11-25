@@ -60,18 +60,24 @@ function RouteComponent() {
               <div>
                 Let&apos;s work together towards a common goal - get in touch!
               </div>
-              <div className="flex flex-wrap gap-1">
-                {/* <Button
-                        variant="link"
-                        className="inline-block h-auto px-1 py-2"
-                        asChild
-                      >
-                        <Link
-                          to="."
-                          href="https://api.whatsapp.com/send?phone=9779800000000"
-                          target="_blank"
-                        > */}
-                {site.telephone}
+              <div className="flex flex-wrap gap-2">
+                <a
+                  href="https://wa.me/9779764837077"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary underline-offset-4 hover:underline"
+                >
+                  +977-9764837077
+                </a>
+                <a
+                  href="https://wa.me/9779761156827"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary underline-offset-4 hover:underline"
+                >
+                  +977-9761156827
+                </a>
+
                 {/* </Link>
                       </Button> */}
               </div>
@@ -96,12 +102,11 @@ function RouteComponent() {
 
       <section className="w-full" id="map">
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.214549701839!2d85.32395957536694!3d27.708954976192652!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb190a0b8e0f0f%3A0xbbb2e0d3b0a2b03b!2sKathmandu!5e0!3m2!1sen!2snp!4v1731600000000!5m2!1sen!2snp"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.7342163520803!2d85.32926089999999!3d27.681586799999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb1900062f74e9%3A0x6e119585561e39d!2sVision%20wisdom%20recruitment!5e0!3m2!1sen!2snp!4v1732560000000!5m2!1sen!2snp"
           className="h-[400px] w-full border-0"
-          allowFullScreen
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
-          title="Kathmandu Map"
+          title="Vision Wisdom Recruitment Location"
         />
       </section>
     </div>

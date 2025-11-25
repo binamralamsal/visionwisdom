@@ -16,6 +16,7 @@ import { Link, createFileRoute, notFound } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { RenderTextEditorContent } from "@/components/render-text-editor-content";
 
 import { seo } from "@/util/seo";
 import { api } from "@/orpc/client";
@@ -127,10 +128,9 @@ function RouteComponent() {
             <div className="grid grid-cols-1 gap-6 p-6 md:grid-cols-3 md:p-8">
               <div className="col-span-2">
                 <div className="mb-6">
-                  <article
-                    className="prose prose-li:my-1 prose-li:leading-snug prose-ul:my-2 prose-p:my-2 prose-headings:mt-4 prose-headings:mb-2 max-w-none"
-                    dangerouslySetInnerHTML={{ __html: job.description }}
-                  />
+                  <article className="prose prose-li:my-1 prose-li:leading-snug prose-ul:my-2 prose-p:my-2 prose-headings:mt-4 prose-headings:mb-2 max-w-none">
+                    <RenderTextEditorContent html={job.description} />
+                  </article>
 
                   <div className="mt-6">
                     <Button
