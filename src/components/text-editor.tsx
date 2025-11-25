@@ -1,10 +1,17 @@
+import z from "zod";
+import { link } from "node:fs/promises";
 import Link from "@tiptap/extension-link";
 import StarterKit from "@tiptap/starter-kit";
 import TiptapImage from "@tiptap/extension-image";
 import Highlight from "@tiptap/extension-highlight";
 import Underline from "@tiptap/extension-underline";
-import { Editor, EditorContent, useEditor } from "@tiptap/react";
 import { BubbleMenu as TiptapBubbleMenu } from "@tiptap/react/menus";
+import {
+  Editor,
+  EditorContent,
+  useEditor,
+  useEditorState,
+} from "@tiptap/react";
 import {
   BoldIcon,
   CodeIcon,
@@ -19,13 +26,15 @@ import {
   StrikethroughIcon,
   UnderlineIcon,
   UndoIcon,
+  UnlinkIcon,
 } from "lucide-react";
 
-import { ReactNode, useState } from "react";
+import { FormEvent, ReactNode, useState } from "react";
 
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Toggle } from "./ui/toggle";
+import { useAppForm } from "./form/hooks";
 import { FileUpload, FileUploader } from "./file-upload";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import {
@@ -45,7 +54,7 @@ const extensions = [
     },
   }),
   Underline,
-  Link.configure(),
+  Link.configure({ openOnClick: false }),
   Highlight.configure(),
   TiptapImage,
 ];
@@ -97,39 +106,64 @@ function LinkComponent({
   editor: Editor;
   children: ReactNode;
 }) {
-  const [linkUrl, setLinkUrl] = useState("");
   const [isLinkPopoverOpen, setIsLinkPopoverOpen] = useState(false);
 
-  const handleSetLink = () => {
-    if (linkUrl) {
-      editor
-        .chain()
-        .focus()
-        .extendMarkRange("link")
-        .setLink({ href: linkUrl })
-        .run();
-    } else {
-      editor.chain().focus().extendMarkRange("link").unsetLink().run();
-    }
-    setIsLinkPopoverOpen(false);
-    setLinkUrl("");
-  };
+  const form = useAppForm({
+    defaultValues: {
+      link: "",
+    },
+    validators: {
+      onChange: z.object({
+        link: z
+          .url({ error: "Please enter a valid URL" })
+          .min(1, "URL is required")
+          .max(2048, "URL is too long"),
+      }),
+      onSubmit: ({ value: { link } }) => {
+        editor
+          .chain()
+          .focus()
+          .extendMarkRange("link")
+          .setLink({ href: link })
+          .run();
+        setIsLinkPopoverOpen(false);
+        form.reset();
+      },
+    },
+  });
 
   return (
     <Popover open={isLinkPopoverOpen} onOpenChange={setIsLinkPopoverOpen}>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
       <PopoverContent className="w-80 p-4">
-        <div className="flex flex-col gap-4">
-          <h3 className="font-medium">Insert Link</h3>
-          <Input
-            placeholder="https://example.com"
-            value={linkUrl}
-            onChange={(e) => setLinkUrl(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSetLink();
-              }
-            }}
+        <form
+          className="flex flex-col gap-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+            form.handleSubmit();
+          }}
+        >
+          <form.AppField
+            name="link"
+            children={(field) => (
+              <field.FormField>
+                <field.FormLabel asChild>
+                  <h3 className="font-medium">Insert Link</h3>
+                </field.FormLabel>
+                <field.FormInput
+                  type="url"
+                  placeholder="https://example.com"
+                  required
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      form.handleSubmit();
+                    }
+                  }}
+                />
+                <field.FormError />
+              </field.FormField>
+            )}
           />
           <div className="flex justify-between">
             <Button
@@ -138,9 +172,9 @@ function LinkComponent({
             >
               Cancel
             </Button>
-            <Button onClick={handleSetLink}>Save</Button>
+            <Button type="submit">Save</Button>
           </div>
-        </div>
+        </form>
       </PopoverContent>
     </Popover>
   );
@@ -198,6 +232,29 @@ export function Toolbar({
     }
   };
 
+  const editorState = useEditorState({
+    editor,
+    selector: (ctx) => ({
+      isBold: ctx.editor.isActive("bold") ?? false,
+      isItalic: ctx.editor.isActive("italic") ?? false,
+      isUnderline: ctx.editor.isActive("underline") ?? false,
+      isHeading2: ctx.editor.isActive("heading", { level: 2 }) ?? false,
+      isHeading3: ctx.editor.isActive("heading", { level: 3 }) ?? false,
+      isHeading4: ctx.editor.isActive("heading", { level: 4 }) ?? false,
+      isHeading5: ctx.editor.isActive("heading", { level: 5 }) ?? false,
+      isHeading6: ctx.editor.isActive("heading", { level: 6 }) ?? false,
+      isStrike: ctx.editor.isActive("strike") ?? false,
+      isHighlight: ctx.editor.isActive("highlight") ?? false,
+      isBlockquote: ctx.editor.isActive("blockquote") ?? false,
+      isLink: ctx.editor.isActive("link") ?? false,
+      isBulletedList: ctx.editor.isActive("bulletList") ?? false,
+      isOrderedList: ctx.editor.isActive("orderedList") ?? false,
+      isCode: ctx.editor.isActive("code") ?? false,
+      canUndo: ctx.editor.can().chain().undo().run(),
+      canRedo: ctx.editor.can().chain().redo().run(),
+    }),
+  });
+
   return (
     <div
       className={cn(
@@ -208,15 +265,15 @@ export function Toolbar({
       <Select
         onValueChange={handleHeadingChange}
         value={
-          editor.isActive("heading", { level: 2 })
+          editorState.isHeading2
             ? "heading2"
-            : editor.isActive("heading", { level: 3 })
+            : editorState.isHeading3
               ? "heading3"
-              : editor.isActive("heading", { level: 4 })
+              : editorState.isHeading4
                 ? "heading4"
-                : editor.isActive("heading", { level: 5 })
+                : editorState.isHeading5
                   ? "heading5"
-                  : editor.isActive("heading", { level: 6 })
+                  : editorState.isHeading6
                     ? "heading6"
                     : "paragraph"
         }
@@ -238,7 +295,7 @@ export function Toolbar({
 
       <Toggle
         size="sm"
-        pressed={editor.isActive("bold")}
+        pressed={editorState.isBold}
         onPressedChange={() => editor.chain().focus().toggleBold().run()}
         aria-label="Toggle bold"
       >
@@ -247,7 +304,7 @@ export function Toolbar({
 
       <Toggle
         size="sm"
-        pressed={editor.isActive("italic")}
+        pressed={editorState.isItalic}
         onPressedChange={() => editor.chain().focus().toggleItalic().run()}
         aria-label="Toggle italic"
       >
@@ -256,7 +313,7 @@ export function Toolbar({
 
       <Toggle
         size="sm"
-        pressed={editor.isActive("underline")}
+        pressed={editorState.isUnderline}
         onPressedChange={() => editor.chain().focus().toggleUnderline().run()}
         aria-label="Toggle underline"
       >
@@ -265,7 +322,7 @@ export function Toolbar({
 
       <Toggle
         size="sm"
-        pressed={editor.isActive("strike")}
+        pressed={editorState.isStrike}
         onPressedChange={() => editor.chain().focus().toggleStrike().run()}
         aria-label="Toggle strikethrough"
       >
@@ -274,7 +331,7 @@ export function Toolbar({
 
       <Toggle
         size="sm"
-        pressed={editor.isActive("highlight")}
+        pressed={editorState.isHighlight}
         onPressedChange={() => editor.chain().focus().toggleHighlight().run()}
         aria-label="Toggle highlight"
       >
@@ -283,7 +340,7 @@ export function Toolbar({
 
       <Toggle
         size="sm"
-        pressed={editor.isActive("code")}
+        pressed={editorState.isCode}
         onPressedChange={() => editor.chain().focus().toggleCode().run()}
         aria-label="Toggle code"
       >
@@ -294,7 +351,7 @@ export function Toolbar({
 
       <Toggle
         size="sm"
-        pressed={editor.isActive("bulletList")}
+        pressed={editorState.isBulletedList}
         onPressedChange={() => editor.chain().focus().toggleBulletList().run()}
         aria-label="Toggle bullet list"
       >
@@ -303,7 +360,7 @@ export function Toolbar({
 
       <Toggle
         size="sm"
-        pressed={editor.isActive("orderedList")}
+        pressed={editorState.isOrderedList}
         onPressedChange={() => editor.chain().focus().toggleOrderedList().run()}
         aria-label="Toggle ordered list"
       >
@@ -312,7 +369,7 @@ export function Toolbar({
 
       <Toggle
         size="sm"
-        pressed={editor.isActive("blockquote")}
+        pressed={editorState.isBlockquote}
         onPressedChange={() => editor.chain().focus().toggleBlockquote().run()}
         aria-label="Toggle blockquote"
       >
@@ -321,21 +378,28 @@ export function Toolbar({
 
       <div className="bg-border mx-1 h-6 w-px" />
 
-      <LinkComponent editor={editor}>
-        <Toggle
-          size="sm"
-          pressed={editor.isActive("link")}
-          aria-label="Toggle link"
+      {!editorState.isLink ? (
+        <LinkComponent editor={editor}>
+          <Button size="icon-sm" aria-label="Insert link" variant="ghost">
+            <LinkIcon className="h-4 w-4" />
+          </Button>
+        </LinkComponent>
+      ) : (
+        <Button
+          size="icon-sm"
+          aria-label="Unlink"
+          onClick={() => editor.chain().focus().unsetLink().run()}
+          variant="secondary"
         >
-          <LinkIcon className="h-4 w-4" />
-        </Toggle>
-      </LinkComponent>
+          <UnlinkIcon className="h-4 w-4" />
+        </Button>
+      )}
 
       <ImageComponent editor={editor}>
         <Toggle
           size="sm"
           pressed={editor.isActive("image")}
-          aria-label="Toggle link"
+          aria-label="Insert image"
         >
           <ImageIcon className="h-4 w-4" />
         </Toggle>
@@ -367,14 +431,26 @@ export function Toolbar({
 }
 
 export function BubbleMenu({ editor }: { editor: Editor }) {
+  const editorState = useEditorState({
+    editor,
+    selector: (ctx) => ({
+      isBold: ctx.editor.isActive("bold") ?? false,
+      isItalic: ctx.editor.isActive("italic") ?? false,
+      isStrike: ctx.editor.isActive("strike") ?? false,
+      isHighlight: ctx.editor.isActive("highlight") ?? false,
+      isUnderline: ctx.editor.isActive("underline") ?? false,
+      isLink: ctx.editor.isActive("link") ?? false,
+      isCode: ctx.editor.isActive("code") ?? false,
+    }),
+  });
   return (
     <TiptapBubbleMenu
       editor={editor}
-      className="bg-background flex items-center rounded-md border shadow-md"
+      className="bg-background relative z-20 flex items-center rounded-md border shadow-md"
     >
       <Toggle
         size="sm"
-        pressed={editor.isActive("bold")}
+        pressed={editorState.isBold}
         onPressedChange={() => editor.chain().focus().toggleBold().run()}
         aria-label="Toggle bold"
       >
@@ -383,7 +459,7 @@ export function BubbleMenu({ editor }: { editor: Editor }) {
 
       <Toggle
         size="sm"
-        pressed={editor.isActive("italic")}
+        pressed={editorState.isItalic}
         onPressedChange={() => editor.chain().focus().toggleItalic().run()}
         aria-label="Toggle italic"
       >
@@ -392,7 +468,7 @@ export function BubbleMenu({ editor }: { editor: Editor }) {
 
       <Toggle
         size="sm"
-        pressed={editor.isActive("underline")}
+        pressed={editorState.isUnderline}
         onPressedChange={() => editor.chain().focus().toggleUnderline().run()}
         aria-label="Toggle underline"
       >
@@ -401,7 +477,7 @@ export function BubbleMenu({ editor }: { editor: Editor }) {
 
       <Toggle
         size="sm"
-        pressed={editor.isActive("strike")}
+        pressed={editorState.isStrike}
         onPressedChange={() => editor.chain().focus().toggleStrike().run()}
         aria-label="Toggle strikethrough"
       >
@@ -410,7 +486,7 @@ export function BubbleMenu({ editor }: { editor: Editor }) {
 
       <Toggle
         size="sm"
-        pressed={editor.isActive("code")}
+        pressed={editorState.isCode}
         onPressedChange={() => editor.chain().focus().toggleCode().run()}
         aria-label="Toggle code"
       >
@@ -419,22 +495,29 @@ export function BubbleMenu({ editor }: { editor: Editor }) {
 
       <Toggle
         size="sm"
-        pressed={editor.isActive("highlight")}
+        pressed={editorState.isHighlight}
         onPressedChange={() => editor.chain().focus().toggleHighlight().run()}
         aria-label="Toggle highlight"
       >
         <HighlighterIcon className="h-4 w-4" />
       </Toggle>
 
-      <LinkComponent editor={editor}>
-        <Toggle
-          size="sm"
-          pressed={editor.isActive("link")}
-          aria-label="Toggle link"
+      {!editorState.isLink ? (
+        <LinkComponent editor={editor}>
+          <Button size="icon-sm" aria-label="Insert link" variant="ghost">
+            <LinkIcon className="h-4 w-4" />
+          </Button>
+        </LinkComponent>
+      ) : (
+        <Button
+          size="icon-sm"
+          aria-label="Unlink"
+          onClick={() => editor.chain().focus().unsetLink().run()}
+          variant="secondary"
         >
-          <LinkIcon className="h-4 w-4" />
-        </Toggle>
-      </LinkComponent>
+          <UnlinkIcon className="h-4 w-4" />
+        </Button>
+      )}
     </TiptapBubbleMenu>
   );
 }
