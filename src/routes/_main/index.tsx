@@ -13,8 +13,20 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
 
+import { seo } from "@/util/seo";
+import { site } from "@/config/site";
+
 export const Route = createFileRoute("/_main/")({
   component: RouteComponent,
+  head: () => ({
+    meta: [
+      ...seo({
+        title: `Home | ${site.name}`,
+        description: site.description,
+        keywords: site.keywords,
+      }),
+    ],
+  }),
 });
 
 function RouteComponent() {

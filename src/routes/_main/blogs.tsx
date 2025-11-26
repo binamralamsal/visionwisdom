@@ -44,8 +44,8 @@ export const Route = createFileRoute("/_main/blogs")({
       ...seo({
         title: `Blogs | ${site.name}`,
         description:
-          "Explore our collection of health and medical blogs, providing expert insights, wellness tips, and the latest updates in the healthcare field.",
-        keywords: `health, medical blogs, wellness tips, healthcare, ${site.name}`,
+          "Explore our collection of articles on jobs, manpower, and foreign employment, offering expert insights, career guidance, overseas job opportunities, and the latest updates in the global recruitment sector.",
+        keywords: `jobs, manpower, foreign employment, overseas recruitment, career guidance, global job opportunities, ${site.name}`,
       }),
       { name: "creator", content: site.name },
       { name: "publisher", content: site.name },

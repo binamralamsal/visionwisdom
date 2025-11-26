@@ -35,11 +35,11 @@ export const Route = createFileRoute("/_main/blogs_/$slug")({
         image: loaderData?.coverPhoto?.url || "/placeholder.svg",
         keywords:
           loaderData?.seoKeywords ||
-          `${loaderData?.category?.name || ``}, health blog, medical tips, ${site.name}`,
+          `${loaderData?.category?.name || ``}, jobs, career guidance, overseas employment , ${site.name}`,
       }),
       { name: "author", content: loaderData?.author?.name || site.name },
       { name: "robot", content: "index, follow" },
-      { name: "canonical", content: "${site.url}/blogs/${loaderData?.slug}" },
+      { name: "canonical", content: `${site.url}/blogs/${loaderData?.slug}` },
     ],
   }),
 });

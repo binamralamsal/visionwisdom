@@ -13,7 +13,7 @@ export const site = {
     "The trusted leader in manpower solutions, delivering reliable and industry-respected staffing services across Nepal.",
   keywords:
     "manpower, recruitment, staffing solutions, workforce management, employment services, Nepal",
-  url: "https://visionwisdomrecruitment.com/",
+  url: "https://visionwisdomrecruitment.com",
   email: "visionwisdomrecruitment@gmail.com",
   streetAddress: "M8JJ+JPM, Park Ln, Kathmandu 44600",
   addressLocality: "Kathmandu",

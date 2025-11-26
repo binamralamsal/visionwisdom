@@ -12,6 +12,8 @@ import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 
 import { Toaster } from "@/components/ui/sonner";
 
+import { site } from "@/config/site";
+
 interface MyRouterContext {
   queryClient: QueryClient;
 }
@@ -27,7 +29,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "TanStack Start Starter",
+        title: site.name,
       },
     ],
     links: [

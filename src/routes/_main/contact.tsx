@@ -4,11 +4,25 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
 
+import { seo } from "@/util/seo";
 import { site } from "@/config/site";
 import { ContactForm } from "@/features/contact-entries/components/contact-form";
 
 export const Route = createFileRoute("/_main/contact")({
   component: RouteComponent,
+  head: () => ({
+    meta: [
+      ...seo({
+        title: `Contact Us | ${site.name}`,
+        description: `Get in touch with ${site.name} for inquiries about jobs, manpower services, and foreign employment opportunities. Our team is here to assist job seekers, employers, and partners with reliable support and information.`,
+        keywords: `contact, manpower agency contact, recruitment support, foreign employment inquiries, job assistance, customer support, ${site.name}`,
+      }),
+      { name: "creator", content: site.name },
+      { name: "publisher", content: site.name },
+      { name: "robot", content: "index, follow" },
+      { rel: "canonical", href: `${site.url}/contact` },
+    ],
+  }),
 });
 
 function RouteComponent() {

@@ -12,6 +12,7 @@ import { Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { api } from "@/orpc/client";
+import { site } from "@/config/site";
 
 export function SiteFooter() {
   const {
@@ -125,20 +126,38 @@ export function SiteFooter() {
               <li className="flex">
                 <MapPin className="text-primary-foreground mr-3 h-5 w-5 shrink-0" />
                 <span className="text-primary-foreground/80">
-                  123 Business Avenue, Suite 500, New York, NY 10001
+                  {site.streetAddress}
                 </span>
               </li>
               <li className="flex">
                 <Phone className="text-primary-foreground mr-3 h-5 w-5 shrink-0" />
-                <span className="text-primary-foreground/80">
-                  +1 (555) 123-4567
+                <span className="text-primary-foreground/80 flex gap-2">
+                  <a
+                    href="https://wa.me/9779764837077"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline-offset-4 hover:underline"
+                  >
+                    +977-9764837077
+                  </a>
+                  <a
+                    href="https://wa.me/9779761156827"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline-offset-4 hover:underline"
+                  >
+                    +977-9761156827
+                  </a>
                 </span>
               </li>
               <li className="flex">
                 <Mail className="text-primary-foreground mr-3 h-5 w-5 shrink-0" />
-                <span className="text-primary-foreground/80">
-                  info@visionwisdom.com
-                </span>
+                <a
+                  href={`mailto:${site.email}`}
+                  className="text-primary-foreground/80"
+                >
+                  {site.email}
+                </a>
               </li>
             </ul>
           </div>

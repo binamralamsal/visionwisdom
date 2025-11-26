@@ -26,6 +26,7 @@ import {
 
 import { cn } from "@/util/cn";
 import { api } from "@/orpc/client";
+import { site } from "@/config/site";
 
 export const Route = createFileRoute("/_main/jobs/")({
   component: RouteComponent,
@@ -57,11 +58,16 @@ export const Route = createFileRoute("/_main/jobs/")({
   },
   head: () => ({
     meta: [
-      { title: "Jobs | YourSite" },
       {
-        rel: "canonical",
-        href: `${typeof window !== `undefined` ? window.location.origin : ``}/jobs`,
+        title: `Jobs | ${site.name}`,
+        description:
+          "Browse the latest job vacancies across various industries, featuring detailed listings, career opportunities, and updates to help job seekers find the right position locally and abroad.",
+        keywords: `job vacancies, latest jobs, career opportunities, employment listings, job search, hiring now, ${site.name}`,
       },
+      { name: "creator", content: site.name },
+      { name: "publisher", content: site.name },
+      { name: "robot", content: "index, follow" },
+      { rel: "canonical", href: `${site.url}/jobs` },
     ],
   }),
 });

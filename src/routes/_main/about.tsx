@@ -21,8 +21,24 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { StatsCounter } from "@/components/stats-counter";
 
+import { seo } from "@/util/seo";
+import { site } from "@/config/site";
+
 export const Route = createFileRoute("/_main/about")({
   component: RouteComponent,
+  head: () => ({
+    meta: [
+      ...seo({
+        title: `About Us | ${site.name}`,
+        description: `Learn more about ${site.name}, our mission, values, and commitment to delivering reliable services in jobs, manpower, and foreign employment. Discover who we are, what we do, and how we help connect job seekers with global opportunities.`,
+        keywords: `about us, company profile, manpower company, foreign employment services, recruitment agency, global opportunities, ${site.name}`,
+      }),
+      { name: "creator", content: site.name },
+      { name: "publisher", content: site.name },
+      { name: "robot", content: "index, follow" },
+      { rel: "canonical", href: `${site.url}/about` },
+    ],
+  }),
 });
 
 function RouteComponent() {
