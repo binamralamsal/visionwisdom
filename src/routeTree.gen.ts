@@ -37,6 +37,7 @@ import { Route as AdminJobsNewRouteImport } from './routes/admin/jobs_.new'
 import { Route as AdminJobCategoriesNewRouteImport } from './routes/admin/job-categories_.new'
 import { Route as AdminBlogsNewRouteImport } from './routes/admin/blogs_.new'
 import { Route as AdminBlogCategoriesNewRouteImport } from './routes/admin/blog-categories_.new'
+import { Route as MainSettingsDevicesRouteImport } from './routes/_main/settings_.devices'
 import { Route as MainJobsSlugRouteImport } from './routes/_main/jobs.$slug'
 import { Route as MainBlogsSlugRouteImport } from './routes/_main/blogs_.$slug'
 import { Route as AdminJobsIdEditRouteImport } from './routes/admin/jobs_.$id.edit'
@@ -183,6 +184,11 @@ const AdminBlogCategoriesNewRoute = AdminBlogCategoriesNewRouteImport.update({
   path: '/blog-categories/new',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const MainSettingsDevicesRoute = MainSettingsDevicesRouteImport.update({
+  id: '/settings_/devices',
+  path: '/settings/devices',
+  getParentRoute: () => MainRouteRoute,
+} as any)
 const MainJobsSlugRoute = MainJobsSlugRouteImport.update({
   id: '/jobs/$slug',
   path: '/jobs/$slug',
@@ -237,6 +243,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/blogs/$slug': typeof MainBlogsSlugRoute
   '/jobs/$slug': typeof MainJobsSlugRoute
+  '/settings/devices': typeof MainSettingsDevicesRoute
   '/admin/blog-categories/new': typeof AdminBlogCategoriesNewRoute
   '/admin/blogs/new': typeof AdminBlogsNewRoute
   '/admin/job-categories/new': typeof AdminJobCategoriesNewRoute
@@ -271,6 +278,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/blogs/$slug': typeof MainBlogsSlugRoute
   '/jobs/$slug': typeof MainJobsSlugRoute
+  '/settings/devices': typeof MainSettingsDevicesRoute
   '/admin/blog-categories/new': typeof AdminBlogCategoriesNewRoute
   '/admin/blogs/new': typeof AdminBlogsNewRoute
   '/admin/job-categories/new': typeof AdminJobCategoriesNewRoute
@@ -308,6 +316,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/_main/blogs_/$slug': typeof MainBlogsSlugRoute
   '/_main/jobs/$slug': typeof MainJobsSlugRoute
+  '/_main/settings_/devices': typeof MainSettingsDevicesRoute
   '/admin/blog-categories_/new': typeof AdminBlogCategoriesNewRoute
   '/admin/blogs_/new': typeof AdminBlogsNewRoute
   '/admin/job-categories_/new': typeof AdminJobCategoriesNewRoute
@@ -345,6 +354,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/blogs/$slug'
     | '/jobs/$slug'
+    | '/settings/devices'
     | '/admin/blog-categories/new'
     | '/admin/blogs/new'
     | '/admin/job-categories/new'
@@ -379,6 +389,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/blogs/$slug'
     | '/jobs/$slug'
+    | '/settings/devices'
     | '/admin/blog-categories/new'
     | '/admin/blogs/new'
     | '/admin/job-categories/new'
@@ -415,6 +426,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/_main/blogs_/$slug'
     | '/_main/jobs/$slug'
+    | '/_main/settings_/devices'
     | '/admin/blog-categories_/new'
     | '/admin/blogs_/new'
     | '/admin/job-categories_/new'
@@ -637,6 +649,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBlogCategoriesNewRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/_main/settings_/devices': {
+      id: '/_main/settings_/devices'
+      path: '/settings/devices'
+      fullPath: '/settings/devices'
+      preLoaderRoute: typeof MainSettingsDevicesRouteImport
+      parentRoute: typeof MainRouteRoute
+    }
     '/_main/jobs/$slug': {
       id: '/_main/jobs/$slug'
       path: '/jobs/$slug'
@@ -693,6 +712,7 @@ interface MainRouteRouteChildren {
   MainIndexRoute: typeof MainIndexRoute
   MainBlogsSlugRoute: typeof MainBlogsSlugRoute
   MainJobsSlugRoute: typeof MainJobsSlugRoute
+  MainSettingsDevicesRoute: typeof MainSettingsDevicesRoute
   MainJobsIndexRoute: typeof MainJobsIndexRoute
 }
 
@@ -707,6 +727,7 @@ const MainRouteRouteChildren: MainRouteRouteChildren = {
   MainIndexRoute: MainIndexRoute,
   MainBlogsSlugRoute: MainBlogsSlugRoute,
   MainJobsSlugRoute: MainJobsSlugRoute,
+  MainSettingsDevicesRoute: MainSettingsDevicesRoute,
   MainJobsIndexRoute: MainJobsIndexRoute,
 }
 

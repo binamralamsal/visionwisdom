@@ -3,7 +3,7 @@ import { LogOut, Menu, Settings, User } from "lucide-react";
 import { useState } from "react";
 
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -31,10 +31,14 @@ export function MobileNav() {
   );
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const logoutUserMutation = useMutation(
     api.users.logout.mutationOptions({
-      onSettled: () => {
+      onSettled: async () => {
+        await queryClient.invalidateQueries(
+          api.users.current.user.queryOptions(),
+        );
         navigate({ to: "/login" });
       },
     }),

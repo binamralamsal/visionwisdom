@@ -1,11 +1,5 @@
 import { getCurrentSession } from "./services/session";
 import {
-  getCurrentUser,
-  loginUser,
-  logoutUser,
-  registerUser,
-} from "./services/user";
-import {
   changeUserPassword,
   createNewUser,
   deleteUser,
@@ -14,6 +8,17 @@ import {
   terminateSession,
   updateUser,
 } from "./services/admin-user";
+import {
+  changeMyPassword,
+  deleteMyAccount,
+  getCurrentUser,
+  getMyProfile,
+  loginUser,
+  logoutUser,
+  registerUser,
+  terminateMySession,
+  updateMyProfile,
+} from "./services/user";
 
 import { bos } from "@/orpc/bos";
 
@@ -27,6 +32,13 @@ export const users = bos
     current: {
       session: getCurrentSession,
       user: getCurrentUser,
+    },
+    profile: {
+      get: getMyProfile,
+      update: updateMyProfile,
+      changePassword: changeMyPassword,
+      terminateSession: terminateMySession,
+      deleteAccount: deleteMyAccount,
     },
     admin: {
       get: getUser,

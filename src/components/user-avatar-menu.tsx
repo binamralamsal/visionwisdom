@@ -1,7 +1,7 @@
 import { LogOut, Settings, User } from "lucide-react";
 
-import { useMutation } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -34,10 +34,14 @@ export function UserAvatarMenu({ user }: UserAvatarMenuProps) {
   };
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const logoutUserMutation = useMutation(
     api.users.logout.mutationOptions({
-      onSettled: () => {
+      onSettled: async () => {
+        await queryClient.invalidateQueries(
+          api.users.current.user.queryOptions(),
+        );
         navigate({ to: "/login" });
       },
     }),

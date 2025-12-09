@@ -25,6 +25,14 @@ export const mos = os.$route({ inputStructure: "detailed" }).errors({
     status: 409,
     message: "Conflict",
   },
+  FORBIDDEN: {
+    status: 403,
+    message: "Forbidden",
+  },
+  BAD_REQUEST: {
+    status: 400,
+    message: "Bad request",
+  },
 });
 
 // For routes
