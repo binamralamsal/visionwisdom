@@ -54,6 +54,21 @@ export const getAllJobApplications = bos
 
     let baseQuery = db
       .selectFrom("jobApplications")
+      .leftJoin(
+        "uploadedFiles as resumeFile",
+        "resumeFile.id",
+        "jobApplications.resumeFileId",
+      )
+      .leftJoin(
+        "uploadedFiles as passportFile",
+        "passportFile.id",
+        "jobApplications.passportFileId",
+      )
+      .leftJoin(
+        "uploadedFiles as medicalFile",
+        "medicalFile.id",
+        "jobApplications.medicalReportFileId",
+      )
       .select([
         "jobApplications.id",
         "jobApplications.userId",
@@ -67,6 +82,18 @@ export const getAllJobApplications = bos
         "jobApplications.medicalReportFileId",
         "jobApplications.createdAt",
         "jobApplications.updatedAt",
+
+        "resumeFile.name as resumeFileName",
+        "resumeFile.url as resumeFileUrl",
+        "resumeFile.fileType as resumeFileType",
+
+        "passportFile.name as passportFileName",
+        "passportFile.url as passportFileUrl",
+        "passportFile.fileType as passportFileType",
+
+        "medicalFile.name as medicalFileName",
+        "medicalFile.url as medicalFileUrl",
+        "medicalFile.fileType as medicalFileType",
       ]);
 
     if (search) {
@@ -87,7 +114,7 @@ export const getAllJobApplications = bos
       baseQuery = baseQuery.orderBy(`jobApplications.${key}` as any, direction);
     });
 
-    const [items, totalRow] = await Promise.all([
+    const [rows, totalRow] = await Promise.all([
       baseQuery.limit(pageSize).offset(offset).execute(),
       baseQuery
         .clearSelect()
@@ -97,6 +124,45 @@ export const getAllJobApplications = bos
     ]);
 
     const total = Number(totalRow?.count ?? 0);
+
+    const items = rows.map((row) => ({
+      id: row.id,
+      userId: row.userId,
+      name: row.name,
+      phone: row.phone,
+      email: row.email,
+      preferredCountries: row.preferredCountries,
+      preferredPosition: row.preferredPosition,
+      resumeFileId: row.resumeFileId,
+      passportFileId: row.passportFileId,
+      medicalReportFileId: row.medicalReportFileId,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
+      resumeFile: row.resumeFileId
+        ? {
+            id: row.resumeFileId,
+            name: row.resumeFileName,
+            url: row.resumeFileUrl,
+            fileType: row.resumeFileType,
+          }
+        : null,
+      passportFile: row.passportFileId
+        ? {
+            id: row.passportFileId,
+            name: row.passportFileName,
+            url: row.passportFileUrl,
+            fileType: row.passportFileType,
+          }
+        : null,
+      medicalReportFile: row.medicalReportFileId
+        ? {
+            id: row.medicalReportFileId,
+            name: row.medicalFileName,
+            url: row.medicalFileUrl,
+            fileType: row.medicalFileType,
+          }
+        : null,
+    }));
 
     return {
       items,
@@ -128,6 +194,21 @@ export const getMyJobApplications = bos
 
     let baseQuery = db
       .selectFrom("jobApplications")
+      .leftJoin(
+        "uploadedFiles as resumeFile",
+        "resumeFile.id",
+        "jobApplications.resumeFileId",
+      )
+      .leftJoin(
+        "uploadedFiles as passportFile",
+        "passportFile.id",
+        "jobApplications.passportFileId",
+      )
+      .leftJoin(
+        "uploadedFiles as medicalFile",
+        "medicalFile.id",
+        "jobApplications.medicalReportFileId",
+      )
       .select([
         "jobApplications.id",
         "jobApplications.userId",
@@ -141,6 +222,18 @@ export const getMyJobApplications = bos
         "jobApplications.medicalReportFileId",
         "jobApplications.createdAt",
         "jobApplications.updatedAt",
+
+        "resumeFile.name as resumeFileName",
+        "resumeFile.url as resumeFileUrl",
+        "resumeFile.fileType as resumeFileType",
+
+        "passportFile.name as passportFileName",
+        "passportFile.url as passportFileUrl",
+        "passportFile.fileType as passportFileType",
+
+        "medicalFile.name as medicalFileName",
+        "medicalFile.url as medicalFileUrl",
+        "medicalFile.fileType as medicalFileType",
       ])
       .where("jobApplications.userId", "=", auth.user.id);
 
@@ -159,7 +252,7 @@ export const getMyJobApplications = bos
       baseQuery = baseQuery.orderBy(`jobApplications.${key}` as any, direction);
     });
 
-    const [items, totalRow] = await Promise.all([
+    const [rows, totalRow] = await Promise.all([
       baseQuery.limit(pageSize).offset(offset).execute(),
       baseQuery
         .clearSelect()
@@ -169,6 +262,45 @@ export const getMyJobApplications = bos
     ]);
 
     const total = Number(totalRow?.count ?? 0);
+
+    const items = rows.map((row) => ({
+      id: row.id,
+      userId: row.userId,
+      name: row.name,
+      phone: row.phone,
+      email: row.email,
+      preferredCountries: row.preferredCountries,
+      preferredPosition: row.preferredPosition,
+      resumeFileId: row.resumeFileId,
+      passportFileId: row.passportFileId,
+      medicalReportFileId: row.medicalReportFileId,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
+      resumeFile: row.resumeFileId
+        ? {
+            id: row.resumeFileId,
+            name: row.resumeFileName,
+            url: row.resumeFileUrl,
+            fileType: row.resumeFileType,
+          }
+        : null,
+      passportFile: row.passportFileId
+        ? {
+            id: row.passportFileId,
+            name: row.passportFileName,
+            url: row.passportFileUrl,
+            fileType: row.passportFileType,
+          }
+        : null,
+      medicalReportFile: row.medicalReportFileId
+        ? {
+            id: row.medicalReportFileId,
+            name: row.medicalFileName,
+            url: row.medicalFileUrl,
+            fileType: row.medicalFileType,
+          }
+        : null,
+    }));
 
     return {
       items,
@@ -184,8 +316,23 @@ export const getJobApplicationById = bos
   .handler(async ({ input: { params }, errors }) => {
     const auth = await getCurrentUser();
 
-    const application = await db
+    const row = await db
       .selectFrom("jobApplications")
+      .leftJoin(
+        "uploadedFiles as resumeFile",
+        "resumeFile.id",
+        "jobApplications.resumeFileId",
+      )
+      .leftJoin(
+        "uploadedFiles as passportFile",
+        "passportFile.id",
+        "jobApplications.passportFileId",
+      )
+      .leftJoin(
+        "uploadedFiles as medicalFile",
+        "medicalFile.id",
+        "jobApplications.medicalReportFileId",
+      )
       .select([
         "jobApplications.id",
         "jobApplications.userId",
@@ -199,21 +346,70 @@ export const getJobApplicationById = bos
         "jobApplications.medicalReportFileId",
         "jobApplications.createdAt",
         "jobApplications.updatedAt",
+
+        "resumeFile.name as resumeFileName",
+        "resumeFile.url as resumeFileUrl",
+        "resumeFile.fileType as resumeFileType",
+
+        "passportFile.name as passportFileName",
+        "passportFile.url as passportFileUrl",
+        "passportFile.fileType as passportFileType",
+
+        "medicalFile.name as medicalFileName",
+        "medicalFile.url as medicalFileUrl",
+        "medicalFile.fileType as medicalFileType",
       ])
-      .where("jobApplications.id", "=", params.id)
+      .where("jobApplications.id", "=", params.id as unknown as number)
       .executeTakeFirst();
 
-    if (!application) {
+    if (!row) {
       throw errors.NOT_FOUND({ message: "Application not found." });
     }
 
-    if (auth.user.role !== "admin" && application.userId !== auth.user.id) {
+    if (auth.user.role !== "admin" && row.userId !== auth.user.id) {
       throw errors.FORBIDDEN({
         message: "You can only view your own applications.",
       });
     }
 
-    return application;
+    return {
+      id: row.id,
+      userId: row.userId,
+      name: row.name,
+      phone: row.phone,
+      email: row.email,
+      preferredCountries: row.preferredCountries,
+      preferredPosition: row.preferredPosition,
+      resumeFileId: row.resumeFileId,
+      passportFileId: row.passportFileId,
+      medicalReportFileId: row.medicalReportFileId,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
+      resumeFile: row.resumeFileId
+        ? {
+            id: row.resumeFileId,
+            name: row.resumeFileName,
+            url: row.resumeFileUrl,
+            fileType: row.resumeFileType,
+          }
+        : null,
+      passportFile: row.passportFileId
+        ? {
+            id: row.passportFileId,
+            name: row.passportFileName,
+            url: row.passportFileUrl,
+            fileType: row.passportFileType,
+          }
+        : null,
+      medicalReportFile: row.medicalReportFileId
+        ? {
+            id: row.medicalReportFileId,
+            name: row.medicalFileName,
+            url: row.medicalFileUrl,
+            fileType: row.medicalFileType,
+          }
+        : null,
+    };
   });
 
 export const deleteJobApplication = bos

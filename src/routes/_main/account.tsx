@@ -3,12 +3,7 @@ import { BriefcaseIcon, FileBadge2, FileHeart, FileText } from "lucide-react";
 import * as React from "react";
 
 import { useQuery } from "@tanstack/react-query";
-import {
-  Link,
-  createFileRoute,
-  redirect,
-  useRouterState,
-} from "@tanstack/react-router";
+import { Link, createFileRoute, redirect } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -17,9 +12,25 @@ import {
   FieldLegend,
   FieldSet,
 } from "@/components/ui/field";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 import { cn } from "@/util/cn";
 import { api } from "@/orpc/client";
+
+type UploadedFile = {
+  id: number;
+  name: string | null;
+  url: string | null;
+  fileType: string | null;
+};
 
 export const Route = createFileRoute("/_main/account")({
   component: RouteComponent,
@@ -31,7 +42,7 @@ export const Route = createFileRoute("/_main/account")({
     } catch {
       throw redirect({
         to: "/login",
-        search: { redirect_url: "/applications" },
+        search: { redirect_url: "/account" },
       });
     }
   },
@@ -117,10 +128,6 @@ function RouteComponent() {
             {!isLoading && !isError && applications.length > 0 && (
               <ul className="space-y-4" aria-label="Job applications">
                 {applications.map((app) => {
-                  const hasResume = Boolean(app.resumeFileId);
-                  const hasPassport = Boolean(app.passportFileId);
-                  const hasMedical = Boolean(app.medicalReportFileId);
-
                   const createdAt = app.createdAt
                     ? new Date(app.createdAt)
                     : null;
@@ -162,17 +169,17 @@ function RouteComponent() {
                           <DocPill
                             icon={FileText}
                             label="CV"
-                            active={hasResume}
+                            file={app.resumeFile as UploadedFile | null}
                           />
                           <DocPill
                             icon={FileBadge2}
                             label="Passport"
-                            active={hasPassport}
+                            file={app.passportFile as UploadedFile | null}
                           />
                           <DocPill
                             icon={FileHeart}
                             label="Medical"
-                            active={hasMedical}
+                            file={app.medicalReportFile as UploadedFile | null}
                           />
                         </div>
                       </article>
@@ -188,32 +195,131 @@ function RouteComponent() {
   );
 }
 
+function isImage(file: UploadedFile | null | undefined) {
+  if (!file) return false;
+  const type = file.fileType?.toLowerCase() || "";
+  const url = file.url?.toLowerCase() || "";
+  return (
+    type.startsWith("image/") ||
+    url.endsWith(".png") ||
+    url.endsWith(".jpg") ||
+    url.endsWith(".jpeg") ||
+    url.endsWith(".webp") ||
+    url.endsWith(".gif")
+  );
+}
+
+function isPdf(file: UploadedFile | null | undefined) {
+  if (!file) return false;
+  const type = file.fileType?.toLowerCase() || "";
+  const url = file.url?.toLowerCase() || "";
+  return type === "application/pdf" || url.endsWith(".pdf");
+}
+
 function DocPill({
   icon: Icon,
   label,
-  active,
+  file,
 }: {
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   label: string;
-  active: boolean;
+  file?: UploadedFile | null;
 }) {
+  const active = !!file && !!file.url;
+
+  // No file uploaded
+  if (!active) {
+    return (
+      <span
+        className={cn(
+          "inline-flex items-center gap-1 rounded-full border px-2 py-1 text-xs",
+          "border-muted bg-muted/40 text-muted-foreground",
+        )}
+      >
+        <Icon className="h-3 w-3" />
+        <span>{label}</span>
+        <span className="text-[10px] opacity-70">—</span>
+      </span>
+    );
+  }
+
+  // With file: show preview dialog + download
   return (
-    <span
-      className={cn(
-        "inline-flex items-center gap-1 rounded-full border px-2 py-1 text-xs",
-        active
-          ? "border-emerald-500/50 bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300"
-          : "border-muted bg-muted/40 text-muted-foreground",
-      )}
-    >
-      <Icon className="h-3 w-3" />
-      <span>{label}</span>
-      <span className="sr-only">{active ? "uploaded" : "missing"}</span>
-      {!active && (
-        <span aria-hidden className="text-[10px] opacity-70">
-          —
-        </span>
-      )}
-    </span>
+    <Dialog>
+      <DialogTrigger asChild>
+        <button
+          type="button"
+          className={cn(
+            "inline-flex items-center gap-1 rounded-full border px-2 py-1 text-xs",
+            "border-emerald-500/50 bg-emerald-50 text-emerald-700",
+            "dark:bg-emerald-950/40 dark:text-emerald-300",
+            "hover:border-primary hover:bg-primary/5 transition-colors",
+          )}
+        >
+          <Icon className="h-3 w-3" />
+          <span className="max-w-20 truncate">{label}</span>
+        </button>
+      </DialogTrigger>
+
+      <DialogContent className="max-h-[90vh] w-full max-w-md overflow-hidden sm:max-w-xl lg:max-w-5xl">
+        <DialogHeader>
+          <DialogTitle>{label} preview</DialogTitle>
+          <DialogDescription className="truncate">
+            {file?.name || file?.url}
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="bg-muted/40 mt-4 rounded-md border p-2">
+          {isImage(file) && file?.url && (
+            <div className="bg-background flex max-h-[60vh] items-center justify-center overflow-auto rounded-md">
+              <img
+                src={file.url}
+                alt={file.name || label}
+                className="max-h-[60vh] max-w-full object-contain"
+              />
+            </div>
+          )}
+
+          {isPdf(file) && file?.url && (
+            <div className="bg-background h-[60vh] w-full overflow-hidden rounded-md">
+              <iframe
+                src={file.url}
+                title={file.name || label}
+                className="h-full w-full"
+              />
+            </div>
+          )}
+
+          {!isImage(file) && !isPdf(file) && (
+            <div className="flex flex-col items-start gap-2 p-2 text-sm">
+              <p className="font-medium">
+                Preview not available for this file type.
+              </p>
+              <p className="text-muted-foreground text-xs">
+                You can still download the file using the button below.
+              </p>
+            </div>
+          )}
+        </div>
+
+        <DialogFooter className="mt-4">
+          <Button
+            type="button"
+            variant="outline"
+            asChild
+            className="w-full justify-center sm:w-auto"
+          >
+            <a
+              href={file?.url || "#"}
+              download
+              target="_blank"
+              rel="noreferrer"
+            >
+              Download {label}
+            </a>
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

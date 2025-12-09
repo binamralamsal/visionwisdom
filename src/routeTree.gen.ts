@@ -18,6 +18,7 @@ import { Route as ApiSplatRouteImport } from './routes/api.$'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminJobsRouteImport } from './routes/admin/jobs'
 import { Route as AdminJobCategoriesRouteImport } from './routes/admin/job-categories'
+import { Route as AdminJobApplicationsRouteImport } from './routes/admin/job-applications'
 import { Route as AdminContactEntriesRouteImport } from './routes/admin/contact-entries'
 import { Route as AdminBlogsRouteImport } from './routes/admin/blogs'
 import { Route as AdminBlogCategoriesRouteImport } from './routes/admin/blog-categories'
@@ -88,6 +89,11 @@ const AdminJobsRoute = AdminJobsRouteImport.update({
 const AdminJobCategoriesRoute = AdminJobCategoriesRouteImport.update({
   id: '/job-categories',
   path: '/job-categories',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminJobApplicationsRoute = AdminJobApplicationsRouteImport.update({
+  id: '/job-applications',
+  path: '/job-applications',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminContactEntriesRoute = AdminContactEntriesRouteImport.update({
@@ -241,6 +247,7 @@ export interface FileRoutesByFullPath {
   '/admin/blog-categories': typeof AdminBlogCategoriesRoute
   '/admin/blogs': typeof AdminBlogsRoute
   '/admin/contact-entries': typeof AdminContactEntriesRoute
+  '/admin/job-applications': typeof AdminJobApplicationsRoute
   '/admin/job-categories': typeof AdminJobCategoriesRoute
   '/admin/jobs': typeof AdminJobsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -277,6 +284,7 @@ export interface FileRoutesByTo {
   '/admin/blog-categories': typeof AdminBlogCategoriesRoute
   '/admin/blogs': typeof AdminBlogsRoute
   '/admin/contact-entries': typeof AdminContactEntriesRoute
+  '/admin/job-applications': typeof AdminJobApplicationsRoute
   '/admin/job-categories': typeof AdminJobCategoriesRoute
   '/admin/jobs': typeof AdminJobsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -316,6 +324,7 @@ export interface FileRoutesById {
   '/admin/blog-categories': typeof AdminBlogCategoriesRoute
   '/admin/blogs': typeof AdminBlogsRoute
   '/admin/contact-entries': typeof AdminContactEntriesRoute
+  '/admin/job-applications': typeof AdminJobApplicationsRoute
   '/admin/job-categories': typeof AdminJobCategoriesRoute
   '/admin/jobs': typeof AdminJobsRoute
   '/admin/users': typeof AdminUsersRoute
@@ -355,6 +364,7 @@ export interface FileRouteTypes {
     | '/admin/blog-categories'
     | '/admin/blogs'
     | '/admin/contact-entries'
+    | '/admin/job-applications'
     | '/admin/job-categories'
     | '/admin/jobs'
     | '/admin/users'
@@ -391,6 +401,7 @@ export interface FileRouteTypes {
     | '/admin/blog-categories'
     | '/admin/blogs'
     | '/admin/contact-entries'
+    | '/admin/job-applications'
     | '/admin/job-categories'
     | '/admin/jobs'
     | '/admin/users'
@@ -429,6 +440,7 @@ export interface FileRouteTypes {
     | '/admin/blog-categories'
     | '/admin/blogs'
     | '/admin/contact-entries'
+    | '/admin/job-applications'
     | '/admin/job-categories'
     | '/admin/jobs'
     | '/admin/users'
@@ -526,6 +538,13 @@ declare module '@tanstack/react-router' {
       path: '/job-categories'
       fullPath: '/admin/job-categories'
       preLoaderRoute: typeof AdminJobCategoriesRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/job-applications': {
+      id: '/admin/job-applications'
+      path: '/job-applications'
+      fullPath: '/admin/job-applications'
+      preLoaderRoute: typeof AdminJobApplicationsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/contact-entries': {
@@ -760,6 +779,7 @@ interface AdminRouteRouteChildren {
   AdminBlogCategoriesRoute: typeof AdminBlogCategoriesRoute
   AdminBlogsRoute: typeof AdminBlogsRoute
   AdminContactEntriesRoute: typeof AdminContactEntriesRoute
+  AdminJobApplicationsRoute: typeof AdminJobApplicationsRoute
   AdminJobCategoriesRoute: typeof AdminJobCategoriesRoute
   AdminJobsRoute: typeof AdminJobsRoute
   AdminUsersRoute: typeof AdminUsersRoute
@@ -780,6 +800,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminBlogCategoriesRoute: AdminBlogCategoriesRoute,
   AdminBlogsRoute: AdminBlogsRoute,
   AdminContactEntriesRoute: AdminContactEntriesRoute,
+  AdminJobApplicationsRoute: AdminJobApplicationsRoute,
   AdminJobCategoriesRoute: AdminJobCategoriesRoute,
   AdminJobsRoute: AdminJobsRoute,
   AdminUsersRoute: AdminUsersRoute,
