@@ -11,6 +11,7 @@ import appCss from "../styles.css?url";
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 
 import { Toaster } from "@/components/ui/sonner";
+import { ConfirmProvider } from "@/components/confirm-alert";
 
 import { site } from "@/config/site";
 
@@ -60,7 +61,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <Toaster richColors />
-        {children}
+        <ConfirmProvider>{children}</ConfirmProvider>
         <TanStackDevtools
           config={{
             position: "bottom-right",

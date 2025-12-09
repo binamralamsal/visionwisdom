@@ -13,6 +13,13 @@ import {
   newJobCategory,
   updateJobCategory,
 } from "./services/categories";
+import {
+  deleteJobApplication,
+  getAllJobApplications,
+  getJobApplicationById,
+  getMyJobApplications,
+  newJobApplication,
+} from "./services/job-applications";
 
 import { bos } from "@/orpc/bos";
 
@@ -34,4 +41,15 @@ export const jobs = bos
       update: updateJobCategory,
       get: getJobCategoryById,
     },
+  });
+
+export const jobApplications = bos
+  .prefix("/job-applications")
+  .tag("Job Applications")
+  .router({
+    new: newJobApplication,
+    all: getAllJobApplications,
+    mine: getMyJobApplications,
+    get: getJobApplicationById,
+    delete: deleteJobApplication,
   });

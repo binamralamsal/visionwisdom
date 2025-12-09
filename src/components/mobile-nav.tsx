@@ -1,4 +1,4 @@
-import { LogOut, Menu, Settings, User } from "lucide-react";
+import { IdCardIcon, LogOut, Menu, Settings, User } from "lucide-react";
 
 import { useState } from "react";
 
@@ -136,6 +136,19 @@ export function MobileNav() {
                   >
                     <User className="h-4 w-4" />
                     <span>My Account</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/apply"
+                    className="hover:bg-muted flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors"
+                    onClick={() => setIsSheetOpened(false)}
+                    activeProps={{
+                      className: "text-primary font-medium bg-muted",
+                    }}
+                  >
+                    <IdCardIcon className="h-4 w-4" />
+                    <span>Apply for Jobs</span>
                   </Link>
                 </li>
                 <li>

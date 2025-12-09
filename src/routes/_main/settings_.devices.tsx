@@ -11,7 +11,7 @@ import {
 
 import { Fragment } from "react/jsx-runtime";
 
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { Badge } from "@/components/ui/badge";
@@ -66,6 +66,18 @@ function getDeviceIcon(userAgent: string) {
 
 export const Route = createFileRoute("/_main/settings_/devices")({
   component: RouteComponent,
+  beforeLoad: async ({ context }) => {
+    try {
+      await context.queryClient.ensureQueryData(
+        api.users.profile.get.queryOptions(),
+      );
+    } catch (error) {
+      throw redirect({
+        to: "/login",
+        search: { redirect_url: "/settings/devices" },
+      });
+    }
+  },
 });
 
 function RouteComponent() {

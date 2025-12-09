@@ -1,4 +1,4 @@
-import { LogOut, Settings, User } from "lucide-react";
+import { IdCardIcon, LogOut, Settings, User } from "lucide-react";
 
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -69,6 +69,12 @@ export function UserAvatarMenu({ user }: UserAvatarMenuProps) {
           <Link to="/account" className="cursor-pointer">
             <User className="mr-2 h-4 w-4" />
             <span>My Account</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/apply" className="cursor-pointer">
+            <IdCardIcon className="mr-2 h-4 w-4" />
+            <span>Apply for Jobs</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>

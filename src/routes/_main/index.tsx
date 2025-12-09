@@ -126,8 +126,8 @@ function RouteComponent() {
 
               <div className="flex flex-col gap-2 pt-2 sm:flex-row">
                 <Button size="lg" asChild>
-                  <Link to="/jobs">
-                    View Jobs
+                  <Link to="/apply">
+                    Apply for Jobs
                     <ArrowRightIcon className="h-4 w-4" />
                   </Link>
                 </Button>

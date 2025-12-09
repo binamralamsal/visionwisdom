@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { DATATABLE_PAGE_SIZE } from "@/config/constants";
+import { nameSchema, phoneSchema } from "@/features/auth/auth.schema";
 import { emptyStringAsOptionalSchema } from "@/util/zod-empty-string-as-optional-schema";
 
 export const jobCategorySchema = z.object({
@@ -206,3 +207,62 @@ export const getAllJobsSchema = z.object({
   categories: z.array(z.string()).optional().default([]).catch([]),
 });
 export type GetAllJobsSchema = z.infer<typeof getAllJobsSchema>;
+
+export const jobApplicationSchema = z.object({
+  name: nameSchema,
+  phone: phoneSchema,
+  email: z.email({ message: "Please enter a valid email address." }).trim(),
+  preferredCountries: z
+    .string()
+    .trim()
+    .min(2, { message: "Preferred countries must be at least 2 characters." })
+    .max(1024, {
+      message: "Preferred countries must be less than 1024 characters.",
+    }),
+  preferredPosition: z
+    .string()
+    .trim()
+    .min(2, { message: "Preferred position must be at least 2 characters." })
+    .max(1024, {
+      message: "Preferred position must be less than 1024 characters.",
+    }),
+  resumeFileId: z
+    .number({ message: "Resume or CV is required" })
+    .int({ message: "Resume or CV is required" }),
+  passportFileId: z
+    .number({ message: "Passport is required" })
+    .int({ message: "Passport is required" }),
+  medicalReportFileId: z
+    .number({ message: "Medical report is required" })
+    .int({ message: "Medical report is required" }),
+});
+
+export type JobApplicationSchema = z.infer<typeof jobApplicationSchema>;
+export type JobApplicationSchemaInput = z.input<typeof jobApplicationSchema>;
+
+export const getAllJobApplicationsSchema = z.object({
+  page: z.number().int().min(1).optional().default(1).catch(1),
+  pageSize: z
+    .number()
+    .int()
+    .min(5)
+    .optional()
+    .default(DATATABLE_PAGE_SIZE)
+    .catch(DATATABLE_PAGE_SIZE),
+  search: z.string().optional(),
+  sort: z
+    .object({
+      id: z.enum(["asc", "desc"]),
+      name: z.enum(["asc", "desc"]),
+      email: z.enum(["asc", "desc"]),
+      createdAt: z.enum(["asc", "desc"]),
+      updatedAt: z.enum(["asc", "desc"]),
+    })
+    .partial()
+    .default({ createdAt: "desc" })
+    .catch({ createdAt: "desc" }),
+});
+
+export type GetAllJobApplicationsSchema = z.infer<
+  typeof getAllJobApplicationsSchema
+>;

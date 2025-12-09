@@ -26,6 +26,7 @@ import { Route as MainSettingsRouteImport } from './routes/_main/settings'
 import { Route as MainLoginRouteImport } from './routes/_main/login'
 import { Route as MainContactRouteImport } from './routes/_main/contact'
 import { Route as MainBlogsRouteImport } from './routes/_main/blogs'
+import { Route as MainApplyRouteImport } from './routes/_main/apply'
 import { Route as MainAccountRouteImport } from './routes/_main/account'
 import { Route as MainAboutRouteImport } from './routes/_main/about'
 import { Route as MainJobsIndexRouteImport } from './routes/_main/jobs.index'
@@ -129,6 +130,11 @@ const MainBlogsRoute = MainBlogsRouteImport.update({
   path: '/blogs',
   getParentRoute: () => MainRouteRoute,
 } as any)
+const MainApplyRoute = MainApplyRouteImport.update({
+  id: '/apply',
+  path: '/apply',
+  getParentRoute: () => MainRouteRoute,
+} as any)
 const MainAccountRoute = MainAccountRouteImport.update({
   id: '/account',
   path: '/account',
@@ -226,6 +232,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/about': typeof MainAboutRoute
   '/account': typeof MainAccountRoute
+  '/apply': typeof MainApplyRoute
   '/blogs': typeof MainBlogsRoute
   '/contact': typeof MainContactRoute
   '/login': typeof MainLoginRoute
@@ -261,6 +268,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/about': typeof MainAboutRoute
   '/account': typeof MainAccountRoute
+  '/apply': typeof MainApplyRoute
   '/blogs': typeof MainBlogsRoute
   '/contact': typeof MainContactRoute
   '/login': typeof MainLoginRoute
@@ -299,6 +307,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteRouteWithChildren
   '/_main/about': typeof MainAboutRoute
   '/_main/account': typeof MainAccountRoute
+  '/_main/apply': typeof MainApplyRoute
   '/_main/blogs': typeof MainBlogsRoute
   '/_main/contact': typeof MainContactRoute
   '/_main/login': typeof MainLoginRoute
@@ -337,6 +346,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/about'
     | '/account'
+    | '/apply'
     | '/blogs'
     | '/contact'
     | '/login'
@@ -372,6 +382,7 @@ export interface FileRouteTypes {
   to:
     | '/about'
     | '/account'
+    | '/apply'
     | '/blogs'
     | '/contact'
     | '/login'
@@ -409,6 +420,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/_main/about'
     | '/_main/account'
+    | '/_main/apply'
     | '/_main/blogs'
     | '/_main/contact'
     | '/_main/login'
@@ -572,6 +584,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainBlogsRouteImport
       parentRoute: typeof MainRouteRoute
     }
+    '/_main/apply': {
+      id: '/_main/apply'
+      path: '/apply'
+      fullPath: '/apply'
+      preLoaderRoute: typeof MainApplyRouteImport
+      parentRoute: typeof MainRouteRoute
+    }
     '/_main/account': {
       id: '/_main/account'
       path: '/account'
@@ -704,6 +723,7 @@ declare module '@tanstack/react-router' {
 interface MainRouteRouteChildren {
   MainAboutRoute: typeof MainAboutRoute
   MainAccountRoute: typeof MainAccountRoute
+  MainApplyRoute: typeof MainApplyRoute
   MainBlogsRoute: typeof MainBlogsRoute
   MainContactRoute: typeof MainContactRoute
   MainLoginRoute: typeof MainLoginRoute
@@ -719,6 +739,7 @@ interface MainRouteRouteChildren {
 const MainRouteRouteChildren: MainRouteRouteChildren = {
   MainAboutRoute: MainAboutRoute,
   MainAccountRoute: MainAccountRoute,
+  MainApplyRoute: MainApplyRoute,
   MainBlogsRoute: MainBlogsRoute,
   MainContactRoute: MainContactRoute,
   MainLoginRoute: MainLoginRoute,

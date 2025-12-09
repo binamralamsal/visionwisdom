@@ -482,9 +482,8 @@ function FilePreviewWithDownload({
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger>
-          <Link
-            to="."
+        <TooltipTrigger asChild>
+          <a
             href={src}
             target="_blank"
             download
@@ -492,7 +491,7 @@ function FilePreviewWithDownload({
           >
             <div className="p-2">{children}</div>
             <DownloadIcon className="absolute top-1/2 left-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white p-1 text-black opacity-0 transition group-hover:opacity-100" />
-          </Link>
+          </a>
         </TooltipTrigger>
         <TooltipContent>Download</TooltipContent>
       </Tooltip>

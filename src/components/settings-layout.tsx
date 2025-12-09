@@ -1,5 +1,11 @@
 import { toast } from "sonner";
-import { LogOut, Settings, Smartphone, User } from "lucide-react";
+import {
+  BriefcaseIcon,
+  LogOut,
+  Settings,
+  Smartphone,
+  User,
+} from "lucide-react";
 
 import { useNavigate } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -55,48 +61,56 @@ export function SettingsLayout({
   );
 
   return (
-    <div className="container max-w-7xl py-6 lg:py-10">
-      <div className="mb-6 flex items-center gap-4">
-        <Settings className="h-8 w-8" />
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
-          <p className="text-muted-foreground">
-            Manage your account settings and preferences
-          </p>
+    <div className="min-h-screen">
+      <section className="border-b py-10 md:py-14">
+        <div className="container">
+          <header className="mx-auto flex max-w-4xl flex-col gap-4 text-center md:text-left">
+            <div className="bg-primary/10 inline-flex items-center justify-center gap-2 self-center rounded-full px-3 py-1 md:self-start">
+              <Settings className="text-primary h-4 w-4" />
+              <span className="text-primary text-xs font-medium tracking-wide uppercase">
+                Account Management
+              </span>
+            </div>
+            <h1 className="text-3xl font-semibold text-balance md:text-4xl">
+              Settings & Preferences
+            </h1>
+            <p className="text-muted-foreground text-sm text-balance md:text-base">
+              Manage your personal details, security configurations, and
+              notification preferences to customize your experience.
+            </p>
+          </header>
         </div>
-      </div>
+      </section>
 
-      <Separator className="mb-6" />
+      <div className="container">
+        <div className="mx-auto flex max-w-4xl flex-col gap-8 py-10 md:py-14 lg:flex-row">
+          <aside className="shrink-0 lg:w-64">
+            <SettingsSidebar items={settingsNavItems} />
 
-      <div className="flex flex-col gap-8 lg:flex-row">
-        {/* Sidebar */}
-        <aside className="shrink-0 lg:w-64">
-          <SettingsSidebar items={settingsNavItems} />
+            <Separator className="my-4" />
 
-          <Separator className="my-4" />
+            <div className="space-y-1">
+              <Button
+                variant="ghost"
+                className="text-muted-foreground hover:text-foreground w-full justify-start"
+                onClick={() => logoutMutation.mutateAsync({})}
+                disabled={logoutMutation.isPending}
+              >
+                <LogOut className="mr-3 h-4 w-4" />
+                Logout
+              </Button>
+            </div>
+          </aside>
 
-          <div className="space-y-1">
-            <Button
-              variant="ghost"
-              className="text-muted-foreground hover:text-foreground w-full justify-start"
-              onClick={() => logoutMutation.mutateAsync({})}
-              disabled={logoutMutation.isPending}
-            >
-              <LogOut className="mr-3 h-4 w-4" />
-              Logout
-            </Button>
+          <div className="min-w-0 flex-1">
+            <div className="mb-6">
+              <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>
+              {description && (
+                <p className="text-muted-foreground mt-1">{description}</p>
+              )}
+            </div>
+            {children}
           </div>
-        </aside>
-
-        {/* Main Content */}
-        <div className="min-w-0 flex-1">
-          <div className="mb-6">
-            <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>
-            {description && (
-              <p className="text-muted-foreground mt-1">{description}</p>
-            )}
-          </div>
-          {children}
         </div>
       </div>
     </div>

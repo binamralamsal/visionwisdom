@@ -5,21 +5,14 @@ import { KeyRound, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 import { useStore } from "@tanstack/react-form";
-import { useNavigate } from "@tanstack/react-router";
-import { createFileRoute } from "@tanstack/react-router";
+import { redirect, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, isRedirect } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import { useAppForm } from "@/components/form/hooks";
 import { Separator } from "@/components/ui/separator";
 import { SettingsLayout } from "@/components/settings-layout";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import {
   Item,
   ItemActions,
@@ -34,7 +27,6 @@ import {
   FieldGroup,
   FieldLabel,
   FieldLegend,
-  FieldSeparator,
   FieldSet,
 } from "@/components/ui/field";
 import {
@@ -67,6 +59,15 @@ import {
 
 export const Route = createFileRoute("/_main/settings")({
   component: RouteComponent,
+  beforeLoad: async ({ context }) => {
+    try {
+      await context.queryClient.ensureQueryData(
+        api.users.profile.get.queryOptions(),
+      );
+    } catch (error) {
+      throw redirect({ to: "/login", search: { redirect_url: "/settings" } });
+    }
+  },
 });
 
 const updateProfileSchema = z.object({

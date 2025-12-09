@@ -63,6 +63,21 @@ export interface Email {
   userId: number;
 }
 
+export interface JobApplication {
+  createdAt: Generated<Timestamp>;
+  email: string;
+  id: Generated<number>;
+  medicalReportFileId: number | null;
+  name: string;
+  passportFileId: number | null;
+  phone: string;
+  preferredCountries: string | null;
+  preferredPosition: string | null;
+  resumeFileId: number | null;
+  updatedAt: Generated<Timestamp>;
+  userId: number;
+}
+
 export interface JobCategory {
   createdAt: Generated<Timestamp>;
   id: Generated<number>;
@@ -127,6 +142,7 @@ export interface DB {
   blogs: Blog;
   contactEntries: ContactEntry;
   emails: Email;
+  jobApplications: JobApplication;
   jobCategories: JobCategory;
   jobs: Job;
   sessions: Session;

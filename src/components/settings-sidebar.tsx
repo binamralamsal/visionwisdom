@@ -29,6 +29,7 @@ export function SettingsSidebar({ items, className }: SettingsSidebarProps) {
           <Link
             key={item.href}
             to={item.href}
+            resetScroll={false}
             className={cn(
               "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
               "hover:bg-accent hover:text-accent-foreground",
