@@ -411,18 +411,19 @@ function JobCard({ job }: JobCardProps) {
           </div>
         </div>
       </CardContent>
-      <CardFooter className="p-4 pt-0">
-        <Button className="w-full" asChild size="lg">
+      <CardFooter className="p-4 pt-0 grid grid-cols-2 gap-4">
+        <Button asChild size="lg" variant="outline">
           <Link to="/jobs/$slug" params={{ slug: job.slug }}>
-            Apply Now <ArrowRightIcon className="h-4 w-4" />
+            View Details <ArrowRightIcon className="h-4 w-4" />
           </Link>
+        </Button>
+        <Button  asChild size="lg">
+          <Link to="/apply">Apply Now</Link>
         </Button>
       </CardFooter>
     </Card>
   );
 }
-
-/* helpers */
 
 function renderPageButtons(current: number, total: number) {
   const pages: number[] = [];

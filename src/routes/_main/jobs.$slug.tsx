@@ -15,7 +15,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, createFileRoute, notFound } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { RenderTextEditorContent } from "@/components/render-text-editor-content";
 
 import { seo } from "@/util/seo";
@@ -147,7 +147,7 @@ function RouteComponent() {
 
               <div>
                 <Card>
-                  <CardContent className="p-6">
+                  <CardContent className="pt-6">
                     <h3 className="mb-4 text-lg font-bold">Job Details</h3>
 
                     <div className="space-y-4">
@@ -230,6 +230,11 @@ function RouteComponent() {
                       </div>
                     </div>
                   </CardContent>
+                  <CardFooter className="pb-6">
+                    <Button className="w-full" asChild size="lg">
+                      <Link to="/apply">Apply Now</Link>
+                    </Button>
+                  </CardFooter>
                 </Card>
               </div>
             </div>
