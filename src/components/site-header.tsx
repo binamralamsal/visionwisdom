@@ -36,7 +36,7 @@ export function SiteHeader() {
       <div className="container flex items-center justify-between">
         <Link
           to="/"
-          className="flex items-center gap-1 text-xl font-bold lg:text-2xl"
+          className="text-md flex items-center gap-1 font-bold lg:text-2xl"
         >
           <span>{site.name}</span>
         </Link>

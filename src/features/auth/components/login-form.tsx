@@ -1,7 +1,7 @@
 import { toast } from "sonner";
 
-import { useMutation } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { LoginUserSchemaInput, loginUserSchema } from "../auth.schema";
 
@@ -27,6 +27,8 @@ export function LoginForm({
     select: (value) => value.redirect_url,
   });
 
+  const queryClient = useQueryClient();
+
   const mutation = useMutation(
     api.users.login.mutationOptions({
       onError: (err) => {
@@ -49,6 +51,7 @@ export function LoginForm({
     },
     onSubmit: async ({ value }) => {
       await mutation.mutateAsync({ body: value });
+      queryClient.invalidateQueries(api.users.current.user.queryOptions());
     },
   });
   return (
@@ -108,14 +111,14 @@ export function LoginForm({
                   <field.FormField>
                     <div className="flex items-center">
                       <field.FormLabel>Password</field.FormLabel>
-                      <a
+                      {/*<a
                         href="#"
                         className="ml-auto text-sm underline-offset-4 hover:underline"
                       >
                         Forgot your password?
-                      </a>
+                      </a>*/}
                     </div>
-                    <field.FormInput placeholder="********" type="password" />
+                    <field.FormPasswordInput placeholder="********" />
                     <field.FormError />
                   </field.FormField>
                 )}

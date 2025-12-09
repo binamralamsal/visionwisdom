@@ -21,9 +21,12 @@ import { Route as AdminJobCategoriesRouteImport } from './routes/admin/job-categ
 import { Route as AdminContactEntriesRouteImport } from './routes/admin/contact-entries'
 import { Route as AdminBlogsRouteImport } from './routes/admin/blogs'
 import { Route as AdminBlogCategoriesRouteImport } from './routes/admin/blog-categories'
+import { Route as MainSignupRouteImport } from './routes/_main/signup'
+import { Route as MainSettingsRouteImport } from './routes/_main/settings'
 import { Route as MainLoginRouteImport } from './routes/_main/login'
 import { Route as MainContactRouteImport } from './routes/_main/contact'
 import { Route as MainBlogsRouteImport } from './routes/_main/blogs'
+import { Route as MainAccountRouteImport } from './routes/_main/account'
 import { Route as MainAboutRouteImport } from './routes/_main/about'
 import { Route as MainJobsIndexRouteImport } from './routes/_main/jobs.index'
 import { Route as ApiRpcSplatRouteImport } from './routes/api.rpc.$'
@@ -100,6 +103,16 @@ const AdminBlogCategoriesRoute = AdminBlogCategoriesRouteImport.update({
   path: '/blog-categories',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const MainSignupRoute = MainSignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => MainRouteRoute,
+} as any)
+const MainSettingsRoute = MainSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => MainRouteRoute,
+} as any)
 const MainLoginRoute = MainLoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -113,6 +126,11 @@ const MainContactRoute = MainContactRouteImport.update({
 const MainBlogsRoute = MainBlogsRouteImport.update({
   id: '/blogs',
   path: '/blogs',
+  getParentRoute: () => MainRouteRoute,
+} as any)
+const MainAccountRoute = MainAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
   getParentRoute: () => MainRouteRoute,
 } as any)
 const MainAboutRoute = MainAboutRouteImport.update({
@@ -201,9 +219,12 @@ const AdminBlogCategoriesIdEditRoute =
 export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/about': typeof MainAboutRoute
+  '/account': typeof MainAccountRoute
   '/blogs': typeof MainBlogsRoute
   '/contact': typeof MainContactRoute
   '/login': typeof MainLoginRoute
+  '/settings': typeof MainSettingsRoute
+  '/signup': typeof MainSignupRoute
   '/admin/blog-categories': typeof AdminBlogCategoriesRoute
   '/admin/blogs': typeof AdminBlogsRoute
   '/admin/contact-entries': typeof AdminContactEntriesRoute
@@ -232,9 +253,12 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/about': typeof MainAboutRoute
+  '/account': typeof MainAccountRoute
   '/blogs': typeof MainBlogsRoute
   '/contact': typeof MainContactRoute
   '/login': typeof MainLoginRoute
+  '/settings': typeof MainSettingsRoute
+  '/signup': typeof MainSignupRoute
   '/admin/blog-categories': typeof AdminBlogCategoriesRoute
   '/admin/blogs': typeof AdminBlogsRoute
   '/admin/contact-entries': typeof AdminContactEntriesRoute
@@ -266,9 +290,12 @@ export interface FileRoutesById {
   '/_main': typeof MainRouteRouteWithChildren
   '/admin': typeof AdminRouteRouteWithChildren
   '/_main/about': typeof MainAboutRoute
+  '/_main/account': typeof MainAccountRoute
   '/_main/blogs': typeof MainBlogsRoute
   '/_main/contact': typeof MainContactRoute
   '/_main/login': typeof MainLoginRoute
+  '/_main/settings': typeof MainSettingsRoute
+  '/_main/signup': typeof MainSignupRoute
   '/admin/blog-categories': typeof AdminBlogCategoriesRoute
   '/admin/blogs': typeof AdminBlogsRoute
   '/admin/contact-entries': typeof AdminContactEntriesRoute
@@ -300,9 +327,12 @@ export interface FileRouteTypes {
   fullPaths:
     | '/admin'
     | '/about'
+    | '/account'
     | '/blogs'
     | '/contact'
     | '/login'
+    | '/settings'
+    | '/signup'
     | '/admin/blog-categories'
     | '/admin/blogs'
     | '/admin/contact-entries'
@@ -331,9 +361,12 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/about'
+    | '/account'
     | '/blogs'
     | '/contact'
     | '/login'
+    | '/settings'
+    | '/signup'
     | '/admin/blog-categories'
     | '/admin/blogs'
     | '/admin/contact-entries'
@@ -364,9 +397,12 @@ export interface FileRouteTypes {
     | '/_main'
     | '/admin'
     | '/_main/about'
+    | '/_main/account'
     | '/_main/blogs'
     | '/_main/contact'
     | '/_main/login'
+    | '/_main/settings'
+    | '/_main/signup'
     | '/admin/blog-categories'
     | '/admin/blogs'
     | '/admin/contact-entries'
@@ -489,6 +525,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBlogCategoriesRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/_main/signup': {
+      id: '/_main/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof MainSignupRouteImport
+      parentRoute: typeof MainRouteRoute
+    }
+    '/_main/settings': {
+      id: '/_main/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof MainSettingsRouteImport
+      parentRoute: typeof MainRouteRoute
+    }
     '/_main/login': {
       id: '/_main/login'
       path: '/login'
@@ -508,6 +558,13 @@ declare module '@tanstack/react-router' {
       path: '/blogs'
       fullPath: '/blogs'
       preLoaderRoute: typeof MainBlogsRouteImport
+      parentRoute: typeof MainRouteRoute
+    }
+    '/_main/account': {
+      id: '/_main/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof MainAccountRouteImport
       parentRoute: typeof MainRouteRoute
     }
     '/_main/about': {
@@ -627,9 +684,12 @@ declare module '@tanstack/react-router' {
 
 interface MainRouteRouteChildren {
   MainAboutRoute: typeof MainAboutRoute
+  MainAccountRoute: typeof MainAccountRoute
   MainBlogsRoute: typeof MainBlogsRoute
   MainContactRoute: typeof MainContactRoute
   MainLoginRoute: typeof MainLoginRoute
+  MainSettingsRoute: typeof MainSettingsRoute
+  MainSignupRoute: typeof MainSignupRoute
   MainIndexRoute: typeof MainIndexRoute
   MainBlogsSlugRoute: typeof MainBlogsSlugRoute
   MainJobsSlugRoute: typeof MainJobsSlugRoute
@@ -638,9 +698,12 @@ interface MainRouteRouteChildren {
 
 const MainRouteRouteChildren: MainRouteRouteChildren = {
   MainAboutRoute: MainAboutRoute,
+  MainAccountRoute: MainAccountRoute,
   MainBlogsRoute: MainBlogsRoute,
   MainContactRoute: MainContactRoute,
   MainLoginRoute: MainLoginRoute,
+  MainSettingsRoute: MainSettingsRoute,
+  MainSignupRoute: MainSignupRoute,
   MainIndexRoute: MainIndexRoute,
   MainBlogsSlugRoute: MainBlogsSlugRoute,
   MainJobsSlugRoute: MainJobsSlugRoute,

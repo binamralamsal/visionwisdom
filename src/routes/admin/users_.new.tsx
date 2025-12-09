@@ -161,7 +161,7 @@ function RouteComponent() {
                   children={(field) => (
                     <field.FormField>
                       <field.FormLabel>Password</field.FormLabel>
-                      <field.FormInput type="password" placeholder="********" />
+                      <field.FormPasswordInput placeholder="********" />
                       <field.FormError />
                       <field.FormDescription>
                         Enter a suitable password with at least 8 characters,
@@ -175,7 +175,7 @@ function RouteComponent() {
                   children={(field) => (
                     <field.FormField>
                       <field.FormLabel>Confirm Password</field.FormLabel>
-                      <field.FormInput type="password" placeholder="********" />
+                      <field.FormPasswordInput placeholder="********" />
                       <field.FormError />
                     </field.FormField>
                   )}

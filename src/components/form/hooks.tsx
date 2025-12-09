@@ -6,6 +6,7 @@ import { FormField } from "./form-field";
 import { FormInput } from "./form-input";
 import { FormLabel } from "./form-label";
 import { FormTextarea } from "./form-textarea";
+import { FormPasswordInput } from "./form-password-input";
 import { Field, FieldDescription, FieldGroup } from "../ui/field";
 
 const { fieldContext, formContext, useFieldContext, useFormContext } =
@@ -18,6 +19,7 @@ const { useAppForm, withForm } = createFormHook({
     FormDescription: FieldDescription,
     FormError,
     FormInput,
+    FormPasswordInput,
     FormTextarea,
   },
   formComponents: {
