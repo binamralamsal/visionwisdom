@@ -120,3 +120,40 @@ export const newUserClientSchema = z
   });
 export type NewUserClientSchema = z.infer<typeof newUserClientSchema>;
 export type NewUserClientSchemaInput = z.input<typeof newUserClientSchema>;
+
+export const phoneSchema = z
+  .string()
+  .trim()
+  .length(10, { message: "Phone number must be exactly 10 digits." })
+  .regex(/^(98|97)\d{8}$/, {
+    message: "Phone number must start with 98 or 97 and be 10 digits total.",
+  });
+
+export type PhoneSchema = z.infer<typeof phoneSchema>;
+
+export const registerUserSchema = z.object({
+  name: nameSchema,
+  email: emailSchema,
+  phone: phoneSchema,
+  password: newPasswordSchema,
+});
+
+export type RegisterUserSchema = z.infer<typeof registerUserSchema>;
+
+export const registerUserClientSchema = z
+  .object({
+    name: nameSchema,
+    email: emailSchema,
+    phone: phoneSchema,
+    password: newPasswordSchema,
+    confirmPassword: newPasswordSchema,
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match.",
+    path: ["confirmPassword"],
+  });
+
+export type RegisterUserClientSchema = z.infer<typeof registerUserClientSchema>;
+export type RegisterUserClientSchemaInput = z.input<
+  typeof registerUserClientSchema
+>;

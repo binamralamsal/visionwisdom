@@ -1,7 +1,7 @@
 import { toast } from "sonner";
 
-import { useNavigate, useSearch } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 
 import { LoginUserSchemaInput, loginUserSchema } from "../auth.schema";
 
@@ -126,7 +126,7 @@ export function LoginForm({
               <form.FormField>
                 <form.FormButton type="submit">Login</form.FormButton>
                 <form.FormDescription className="text-center">
-                  Don&apos;t have an account? <a href="#">Sign up</a>
+                  Don&apos;t have an account? <Link to="/signup">Sign up</Link>
                 </form.FormDescription>
               </form.FormField>
             </form.FormGroup>

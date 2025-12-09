@@ -1,9 +1,9 @@
 import { getRequestHeader } from "@tanstack/react-start/server";
 
 import { getCurrentSession } from "./session";
-import { loginUserSchema } from "../../auth.schema";
 import { getIPAddress } from "../use-cases/location";
-import { verifyPassword } from "../use-cases/password";
+import { hashPassword, verifyPassword } from "../use-cases/password";
+import { loginUserSchema, registerUserSchema } from "../../auth.schema";
 import {
   createSession,
   deleteSessionTokenCookie,
@@ -18,7 +18,6 @@ import { bos, orpcInput } from "@/orpc/bos";
 export const loginUser = bos
   .route({ method: "POST", path: "/login" })
   .input(orpcInput({ body: loginUserSchema }))
-  // .output(z.object({ token: z.string() }))
   .handler(
     async ({
       input: {
@@ -104,4 +103,70 @@ export const logoutUser = bos
 
     return { message: "Logout successful" };
   })
+  .callable();
+
+export const registerUser = bos
+  .route({ method: "POST", path: "/register" })
+  .input(orpcInput({ body: registerUserSchema }))
+  .handler(
+    async ({
+      input: {
+        body: { email, password, name, phone },
+      },
+      errors,
+    }) => {
+      const existingEmail = await db
+        .selectFrom("emails")
+        .select("email")
+        .where("email", "=", email)
+        .executeTakeFirst();
+
+      if (existingEmail) {
+        throw errors.CONFLICT({
+          message: "An account with this email already exists.",
+        });
+      }
+
+      const ip = getIPAddress() || "0.0.0.0";
+      const userAgent = getRequestHeader("user-agent");
+
+      if (!userAgent) {
+        throw errors.INTERNAL_SERVER_ERROR({
+          message: "Unable to complete registration",
+        });
+      }
+
+      const hashedPassword = await hashPassword(password);
+
+      const user = await db
+        .insertInto("users")
+        .values({
+          name,
+          password: hashedPassword,
+          role: "user",
+          phone,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        })
+        .returning(["id"])
+        .executeTakeFirstOrThrow();
+
+      await db
+        .insertInto("emails")
+        .values({
+          email,
+          userId: user.id,
+        })
+        .execute();
+
+      const token = generateSessionToken();
+      await createSession({ token, userId: user.id, ip, userAgent });
+      setSessionTokenCookie(token);
+
+      return {
+        message: "Registration successful. Welcome!",
+        userId: user.id,
+      };
+    },
+  )
   .callable();

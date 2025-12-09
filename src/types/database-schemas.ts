@@ -117,6 +117,7 @@ export interface User {
   id: Generated<number>;
   name: string;
   password: string;
+  phone: string | null;
   role: Generated<UserRole>;
   updatedAt: Generated<Timestamp>;
 }

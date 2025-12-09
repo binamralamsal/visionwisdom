@@ -1,5 +1,10 @@
 import { getCurrentSession } from "./services/session";
-import { getCurrentUser, loginUser, logoutUser } from "./services/user";
+import {
+  getCurrentUser,
+  loginUser,
+  logoutUser,
+  registerUser,
+} from "./services/user";
 import {
   changeUserPassword,
   createNewUser,
@@ -18,6 +23,7 @@ export const users = bos
   .router({
     login: loginUser,
     logout: logoutUser,
+    register: registerUser,
     current: {
       session: getCurrentSession,
       user: getCurrentUser,
