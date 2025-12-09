@@ -221,16 +221,14 @@ function RouteComponent() {
                           <DeviceIcon className="h-5 w-5" />
                         </div>
                       </ItemMedia>
-                      <ItemContent className="min-w-0 flex-1 space-y-1">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <ItemTitle className="text-sm font-semibold">
-                            {session.browser || "Unknown Browser"}
-                          </ItemTitle>
-                        </div>
+                      <ItemContent>
+                        <ItemTitle className="text-sm font-semibold">
+                          {session.browser || "Unknown Browser"}
+                        </ItemTitle>
                         <ItemDescription className="text-xs">
                           {session.os || "Unknown OS"}
                         </ItemDescription>
-                        <div className="text-muted-foreground mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs">
+                        <div className="text-muted-foreground flex flex-wrap gap-x-4 gap-y-1 text-xs">
                           <div className="flex items-center gap-1">
                             <MapPin className="h-3 w-3" />
                             <span>
