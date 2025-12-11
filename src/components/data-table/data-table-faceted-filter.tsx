@@ -1,6 +1,6 @@
 import { Check, PlusCircle } from "lucide-react";
 
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 
 import { Column } from "@tanstack/react-table";
 import { useNavigate, useSearch } from "@tanstack/react-router";
@@ -34,14 +34,6 @@ interface DataTableFacetedFilterProps<TData, TValue> {
   queryKey: string;
 }
 
-function areSetsEqual<T>(a: Set<T>, b: Set<T>): boolean {
-  if (a.size !== b.size) return false;
-  for (const item of a) {
-    if (!b.has(item)) return false;
-  }
-  return true;
-}
-
 export function DataTableFacetedFilter<TData, TValue>({
   column,
   title,
@@ -49,49 +41,18 @@ export function DataTableFacetedFilter<TData, TValue>({
   options,
 }: DataTableFacetedFilterProps<TData, TValue>) {
   const facets = column?.getFacetedUniqueValues();
-
-  const [selectedValues, setSelectedValues] = useState(() => {
-    const filteredValues = column?.getFilterValue() as string[];
-
-    return new Set(filteredValues);
-  });
-
   const navigate = useNavigate();
+  const searchParams = useSearch({ strict: false });
 
-  const searchParams = useSearch({
-    strict: false,
-  });
-
-  useEffect(() => {
-    // @ts-expect-error -- ignore this
-    const values = searchParams[column.id] as string[];
-    if (!Array.isArray(values)) return;
-
-    const newSet = new Set(values);
-    if (!areSetsEqual(selectedValues, newSet)) setSelectedValues(newSet);
-    setSelectedValues(new Set(values));
-  }, [searchParams]);
-
-  useEffect(() => {
-    if (!column) return;
-
-    const filterValues = Array.from(selectedValues);
-    column.setFilterValue(filterValues.length ? filterValues : undefined);
-
-    navigate({
-      to: ".",
-      search: (prev) => {
-        return {
-          ...prev,
-          [queryKey]:
-            selectedValues.size === 0 ? undefined : Array.from(selectedValues),
-        };
-      },
-    });
-  }, [selectedValues]);
+  const selectedValues = useMemo(() => {
+    // @ts-expect-error -- dynamic key access
+    const values = searchParams[queryKey] as string[] | undefined;
+    return new Set(Array.isArray(values) ? values : []);
+  }, [searchParams, queryKey]);
 
   function handleFilterItemChange(option: FiltersOptionsType) {
     if (!column) return;
+
     const newSelectedValues = new Set(selectedValues);
     const isSelected = newSelectedValues.has(option.value);
 
@@ -101,13 +62,28 @@ export function DataTableFacetedFilter<TData, TValue>({
       newSelectedValues.add(option.value);
     }
 
-    setSelectedValues(newSelectedValues);
+    navigate({
+      to: ".",
+      search: (prev) => ({
+        ...prev,
+        [queryKey]:
+          newSelectedValues.size === 0
+            ? undefined
+            : Array.from(newSelectedValues),
+      }),
+    });
   }
 
   function handleClearFilters() {
     if (!column) return;
 
-    setSelectedValues(new Set());
+    navigate({
+      to: ".",
+      search: (prev) => ({
+        ...prev,
+        [queryKey]: undefined,
+      }),
+    });
   }
 
   return (
@@ -116,7 +92,7 @@ export function DataTableFacetedFilter<TData, TValue>({
         <Button variant="outline" size="sm" className="h-10 border-dashed">
           <PlusCircle />
           {title}
-          {selectedValues?.size > 0 && (
+          {selectedValues.size > 0 && (
             <>
               <Separator orientation="vertical" className="mx-2 h-4" />
               <Badge

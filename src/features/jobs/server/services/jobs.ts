@@ -29,6 +29,7 @@ function getJobBasicQuery() {
       "j.status",
       "j.createdAt",
       "j.updatedAt",
+      "j.isFeatured",
     ])
     .select((eb) => [
       jsonObjectFrom(
@@ -185,7 +186,16 @@ export const getAllJobs = bos
   .route({ method: "GET", path: "/" })
   .input(orpcInput({ query: getAllJobsSchema }))
   .handler(async ({ input: { query } }) => {
-    const { sort, page, pageSize, search, categories, status, gender } = query;
+    const {
+      sort,
+      page,
+      pageSize,
+      search,
+      categories,
+      status,
+      gender,
+      isFeatured,
+    } = query;
 
     function createBaseQuery() {
       let query = db
@@ -218,6 +228,14 @@ export const getAllJobs = bos
         query = query.where("jobs.gender", "in", gender);
       }
 
+      if (isFeatured.length > 0) {
+        query = query.where(
+          "jobs.isFeatured",
+          "in",
+          isFeatured.map((v) => v === "yes"),
+        );
+      }
+
       return query;
     }
 
@@ -233,6 +251,7 @@ export const getAllJobs = bos
         "jobs.status",
         "jobs.createdAt",
         "jobs.updatedAt",
+        "jobs.isFeatured",
         "jobCategories.id as categoryId",
         "jobCategories.name as categoryName",
         "jobCategories.slug as categorySlug",

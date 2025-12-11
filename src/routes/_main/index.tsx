@@ -9,11 +9,14 @@ import {
   UsersIcon,
 } from "lucide-react";
 
+import { useQuery } from "@tanstack/react-query";
 import { Link, createFileRoute } from "@tanstack/react-router";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 import { seo } from "@/util/seo";
+import { api } from "@/orpc/client";
 import { site } from "@/config/site";
 
 export const Route = createFileRoute("/_main/")({
@@ -30,6 +33,19 @@ export const Route = createFileRoute("/_main/")({
 });
 
 function RouteComponent() {
+  const { data: featuredJobs } = useQuery(
+    api.jobs.all.queryOptions({
+      input: {
+        query: {
+          isFeatured: ["yes"],
+          status: ["published"],
+          page: 1,
+          pageSize: 4,
+        },
+      },
+    }),
+  );
+
   const stats = [
     {
       icon: <CheckIcon className="text-highlight h-6 w-6" />,
@@ -79,26 +95,16 @@ function RouteComponent() {
     },
   ];
 
-  const jobs = [
-    {
-      title: "Construction Workers",
-      location: "Qatar",
-      salary: "$1,500 - $2,200/month",
-      category: "Construction",
-    },
-    {
-      title: "Registered Nurses",
-      location: "United Kingdom",
-      salary: "$3,500 - $4,500/month",
-      category: "Healthcare",
-    },
-    {
-      title: "IT Specialists",
-      location: "Singapore",
-      salary: "$4,000 - $6,000/month",
-      category: "Technology",
-    },
-  ];
+  const displayedJobs = featuredJobs?.jobs || [];
+  const jobCount = displayedJobs.length;
+
+  const getGridClasses = () => {
+    if (jobCount === 0) return "grid-cols-1";
+    if (jobCount === 1) return "grid-cols-1 md:max-w-md md:mx-auto";
+    if (jobCount === 2) return "grid-cols-1 md:grid-cols-2";
+    if (jobCount === 3) return "grid-cols-1 md:grid-cols-2 lg:grid-cols-3";
+    return "grid-cols-1 md:grid-cols-2 lg:grid-cols-4"; // 4 jobs
+  };
 
   return (
     <main>
@@ -316,43 +322,76 @@ function RouteComponent() {
             ))}
           </div>
 
-          <div className="mb-12">
-            <h3 className="mb-6 text-center text-xl font-bold text-balance md:text-2xl">
-              Featured Job Opportunities
-            </h3>
+          {displayedJobs.length > 0 && (
+            <div className="mb-12">
+              <div className="mb-6 flex items-center justify-center gap-2">
+                <StarIcon className="h-5 w-5 fill-yellow-500 text-yellow-500" />
+                <h3 className="text-center text-xl font-bold text-balance md:text-2xl">
+                  Featured Job Opportunities
+                </h3>
+              </div>
 
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-              {jobs.map((job, index) => (
-                <div
-                  key={index}
-                  className="glass-card p-6 transition-all hover:shadow-md"
-                >
-                  <span className="bg-primary/10 text-primary mb-4 inline-block rounded-full px-2 py-1 text-xs font-medium">
-                    {job.category}
-                  </span>
-                  <h4 className="mb-1 text-lg font-bold">{job.title}</h4>
-                  <p className="text-foreground/70 mb-3 flex items-center text-sm">
-                    <GlobeIcon className="mr-1 inline h-4 w-4" /> {job.location}
-                  </p>
-                  <p className="text-highlight mb-4 font-medium">
-                    {job.salary}
-                  </p>
-                  <a
-                    href="#"
-                    className="text-primary hover:text-primary/80 inline-flex items-center text-sm font-medium transition-colors"
+              <div className={`grid gap-6 ${getGridClasses()}`}>
+                {displayedJobs.map((job) => (
+                  <div
+                    key={job.id}
+                    className="glass-card group relative p-6 transition-all hover:shadow-md"
                   >
-                    View Details
-                    <ArrowRightIcon className="ml-1 h-4 w-4" />
-                  </a>
-                </div>
-              ))}
+                    <div className="absolute top-4 right-4">
+                      <Badge
+                        variant="secondary"
+                        className="border-yellow-200 bg-yellow-100 text-yellow-700"
+                      >
+                        <StarIcon className="mr-1 h-3 w-3 fill-yellow-500" />
+                        Featured
+                      </Badge>
+                    </div>
+
+                    <div className="mt-2">
+                      {job.categoryName && (
+                        <span className="bg-primary/10 text-primary mb-3 inline-block rounded-full px-2 py-1 text-xs font-medium">
+                          {job.categoryName}
+                        </span>
+                      )}
+                      <h4 className="mb-2 line-clamp-2 text-lg font-bold">
+                        {job.title}
+                      </h4>
+                      <div className="mb-4 space-y-2">
+                        <p className="text-foreground/70 flex items-center text-sm">
+                          <GlobeIcon className="mr-2 inline h-4 w-4 shrink-0" />
+                          <span className="truncate">{job.location}</span>
+                        </p>
+                        {job.company && (
+                          <p className="text-foreground/70 flex items-center text-sm">
+                            <UsersIcon className="mr-2 inline h-4 w-4 shrink-0" />
+                            <span className="truncate">{job.company}</span>
+                          </p>
+                        )}
+                      </div>
+                      {job.salary && (
+                        <p className="text-highlight mb-4 text-sm font-medium">
+                          {job.salary}
+                        </p>
+                      )}
+                      <Link
+                        to="/jobs/$slug"
+                        params={{ slug: job.slug }}
+                        className="text-primary hover:text-primary/80 inline-flex items-center gap-1 text-sm font-medium transition-colors group-hover:gap-2"
+                      >
+                        View Details
+                        <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="flex justify-center">
             <Button size="lg" asChild>
               <Link to="/jobs">
-                View more
+                View All Jobs
                 <ArrowRightIcon className="h-4 w-4" />
               </Link>
             </Button>

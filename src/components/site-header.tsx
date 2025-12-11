@@ -4,6 +4,7 @@ import { Link } from "@tanstack/react-router";
 
 import { MobileNav } from "./mobile-nav";
 import { DesktopNav } from "./desktop-nav";
+import { VisionWishdomLogo } from "./logo";
 
 import { cn } from "@/util/cn";
 import { site } from "@/config/site";
@@ -36,8 +37,9 @@ export function SiteHeader() {
       <div className="container flex items-center justify-between">
         <Link
           to="/"
-          className="text-md flex items-center gap-1 font-bold lg:text-2xl"
+          className="text-md flex items-center gap-2 font-bold lg:text-2xl"
         >
+          <VisionWishdomLogo className="size-8" />
           <span>{site.name}</span>
         </Link>
 

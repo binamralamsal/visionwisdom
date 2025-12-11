@@ -165,6 +165,11 @@ export const jobSchema = z.object({
     .optional()
     .nullable()
     .default(null),
+  isFeatured: z
+    .boolean({ message: "Invalid Featured Status" })
+    .optional()
+    .nullable()
+    .transform((v) => v ?? false),
 });
 export type JobSchema = z.infer<typeof jobSchema>;
 export type JobSchemaInput = z.input<typeof jobSchema>;
@@ -181,6 +186,11 @@ export const getAllJobsSchema = z.object({
   search: z.string().optional(),
   status: z
     .array(z.enum(["draft", "published", "closed", "archived"]))
+    .optional()
+    .default([])
+    .catch([]),
+  isFeatured: z
+    .array(z.enum(["yes", "no"]))
     .optional()
     .default([])
     .catch([]),
@@ -227,14 +237,20 @@ export const jobApplicationSchema = z.object({
       message: "Preferred position must be less than 1024 characters.",
     }),
   resumeFileId: z
-    .number({ message: "Resume or CV is required" })
-    .int({ message: "Resume or CV is required" }),
+    .int({ message: "Invalid Resume" })
+    .optional()
+    .nullable()
+    .default(null),
   passportFileId: z
-    .number({ message: "Passport is required" })
-    .int({ message: "Passport is required" }),
+    .int({ message: "Invalid Passport" })
+    .optional()
+    .nullable()
+    .default(null),
   medicalReportFileId: z
-    .number({ message: "Medical report is required" })
-    .int({ message: "Medical report is required" }),
+    .int({ message: "Invalid Medical Report" })
+    .optional()
+    .nullable()
+    .default(null),
 });
 
 export type JobApplicationSchema = z.infer<typeof jobApplicationSchema>;

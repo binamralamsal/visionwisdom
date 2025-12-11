@@ -97,6 +97,7 @@ export interface Job {
   fileId: number | null;
   gender: Generated<JobGender>;
   id: Generated<number>;
+  isFeatured: Generated<boolean>;
   location: string | null;
   salary: string | null;
   slug: string;

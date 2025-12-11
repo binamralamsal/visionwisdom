@@ -34,7 +34,17 @@ export const Route = createFileRoute("/admin/jobs")({
   loaderDeps: ({ search }) => ({ search }),
   loader: async ({ context, deps: { search } }) => {
     context.queryClient.prefetchQuery(
-      api.jobs.all.queryOptions({ input: { query: search } }),
+      // api.jobs.all.queryOptions({ input: { query: search } }),
+      api.jobs.all.queryOptions({
+        input: {
+          query: {
+            isFeatured: ["yes"],
+            page: 1,
+            pageSize: 4,
+            status: ["published"],
+          },
+        },
+      }),
     );
     context.queryClient.prefetchQuery(
       api.jobs.categories.all.queryOptions({
@@ -86,6 +96,7 @@ function RouteComponent() {
                 gender: job.gender,
                 status: job.status,
                 category: job.categoryName,
+                isFeatured: job.isFeatured,
               })) || []
             }
             isLoading={isPending}
@@ -95,6 +106,15 @@ function RouteComponent() {
                 queryKey: "status",
                 title: "Status",
                 options: statuses,
+              },
+              {
+                accessorKey: "isFeatured",
+                queryKey: "isFeatured",
+                title: "Is Featured?",
+                options: [
+                  { label: "Yes", value: "yes" },
+                  { label: "No", value: "no" },
+                ],
               },
               {
                 accessorKey: "category",
@@ -115,7 +135,11 @@ function RouteComponent() {
             options={{
               pageCount: data?.pagination.totalPages,
               initialState: {
-                columnVisibility: { updatedAt: false, slug: false },
+                columnVisibility: {
+                  updatedAt: false,
+                  slug: false,
+                  gender: false,
+                },
                 sorting: Object.entries(searchParams.sort).map(
                   ([key, value]) => ({
                     desc: value === "desc",

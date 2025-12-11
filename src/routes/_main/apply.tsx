@@ -1,3 +1,4 @@
+import z from "zod";
 import { toast } from "sonner";
 import {
   BriefcaseIcon,
@@ -46,6 +47,10 @@ import {
 
 export const Route = createFileRoute("/_main/apply")({
   component: RouteComponent,
+  validateSearch: z.object({
+    preferredCountries: z.string().min(1).max(1024).optional().catch(undefined),
+    preferredPosition: z.string().min(1).max(1024).optional().catch(undefined),
+  }),
 });
 
 function RouteComponent() {
@@ -168,16 +173,18 @@ function ApplyForm({
     }),
   );
 
+  const searchParams = Route.useSearch();
+
   const form = useAppForm({
     defaultValues: {
       name: profile.name,
       email: profile.email,
       phone: profile.phone,
-      preferredCountries: "",
-      preferredPosition: "",
-      resumeFileId: undefined as unknown as number,
-      passportFileId: undefined as unknown as number,
-      medicalReportFileId: undefined as unknown as number,
+      preferredCountries: searchParams.preferredCountries || "",
+      preferredPosition: searchParams.preferredPosition || "",
+      resumeFileId: null,
+      passportFileId: null,
+      medicalReportFileId: null,
     } satisfies JobApplicationSchemaInput,
     validators: {
       onChange: jobApplicationSchema,

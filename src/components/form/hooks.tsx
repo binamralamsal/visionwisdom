@@ -5,6 +5,7 @@ import { FormError } from "./form-error";
 import { FormField } from "./form-field";
 import { FormInput } from "./form-input";
 import { FormLabel } from "./form-label";
+import { FormCheckbox } from "./form-checkbox";
 import { FormTextarea } from "./form-textarea";
 import { FormPasswordInput } from "./form-password-input";
 import { Field, FieldDescription, FieldGroup } from "../ui/field";
@@ -21,6 +22,7 @@ const { useAppForm, withForm } = createFormHook({
     FormInput,
     FormPasswordInput,
     FormTextarea,
+    FormCheckbox,
   },
   formComponents: {
     FormGroup: FieldGroup,

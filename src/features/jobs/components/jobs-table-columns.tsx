@@ -49,6 +49,7 @@ export type Job = {
   category?: string | null;
   createdAt: Date;
   updatedAt: Date;
+  isFeatured: boolean;
 };
 
 export const jobsTableColumns: ColumnDef<Job>[] = [
@@ -104,6 +105,17 @@ export const jobsTableColumns: ColumnDef<Job>[] = [
     accessorKey: "category",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Category" />
+    ),
+  },
+  {
+    accessorKey: "isFeatured",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Is Featured?" />
+    ),
+    cell: ({ row }) => (
+      <Badge className="capitalize">
+        {row.original.isFeatured ? "Yes" : "No"}
+      </Badge>
     ),
   },
   {

@@ -411,14 +411,22 @@ function JobCard({ job }: JobCardProps) {
           </div>
         </div>
       </CardContent>
-      <CardFooter className="p-4 pt-0 grid grid-cols-2 gap-4">
+      <CardFooter className="grid grid-cols-2 gap-4 p-4 pt-0">
         <Button asChild size="lg" variant="outline">
           <Link to="/jobs/$slug" params={{ slug: job.slug }}>
             View Details <ArrowRightIcon className="h-4 w-4" />
           </Link>
         </Button>
-        <Button  asChild size="lg">
-          <Link to="/apply">Apply Now</Link>
+        <Button asChild size="lg">
+          <Link
+            to="/apply"
+            search={{
+              preferredCountries: job.location || undefined,
+              preferredPosition: job.title,
+            }}
+          >
+            Apply Now
+          </Link>
         </Button>
       </CardFooter>
     </Card>

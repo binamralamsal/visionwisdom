@@ -232,7 +232,15 @@ function RouteComponent() {
                   </CardContent>
                   <CardFooter className="pb-6">
                     <Button className="w-full" asChild size="lg">
-                      <Link to="/apply">Apply Now</Link>
+                      <Link
+                        to="/apply"
+                        search={{
+                          preferredCountries: job.location || undefined,
+                          preferredPosition: job.title,
+                        }}
+                      >
+                        Apply Now
+                      </Link>
                     </Button>
                   </CardFooter>
                 </Card>

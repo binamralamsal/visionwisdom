@@ -75,6 +75,7 @@ function RouteComponent() {
         status: job.status,
         categoryId: job.category?.id ?? null,
         fileId: job.file?.id ?? null,
+        isFeatured: job.isFeatured ?? false,
       }}
     />
   );

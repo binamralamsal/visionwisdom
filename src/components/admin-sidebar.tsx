@@ -18,6 +18,7 @@ import { ReactNode, Suspense } from "react";
 
 import { Link, LinkProps } from "@tanstack/react-router";
 
+import { VisionWishdomLogo } from "./logo";
 import { AdminNavUser } from "./admin-nav-user";
 import { AdminSearchCommandMenu } from "./admin-search-command-menu";
 import {
@@ -179,12 +180,11 @@ export function AdminSidebar() {
             <SidebarMenuButton size="lg" asChild>
               <Link to="/admin">
                 <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                  {/*<LogoWithoutText
+                  <VisionWishdomLogo
                     className="size-4"
                     mono
-                    monoFillClass="fill-white dark:fill-black"
-                  />*/}
-                  <LayoutDashboardIcon className="size-4" />
+                    monoFillClass="fill-white"
+                  />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
                   <span className="font-semibold">VisionWisdom</span>

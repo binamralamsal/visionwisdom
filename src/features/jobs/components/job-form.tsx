@@ -1,7 +1,7 @@
 import { toast } from "sonner";
 import { LoaderCircleIcon, TrashIcon, XIcon } from "lucide-react";
 
-import { useEffect } from "react";
+import { use, useEffect } from "react";
 
 import { Link } from "@tanstack/react-router";
 import { useNavigate } from "@tanstack/react-router";
@@ -58,6 +58,7 @@ const initialValues: JobSchemaInput = {
   status: "draft",
   categoryId: null,
   fileId: null,
+  isFeatured: false,
 };
 
 const formOpts = formOptions({
@@ -199,6 +200,9 @@ const JobDetails = withForm({
       const slug = slugify(titleValue);
       form.setFieldValue("slug", slug);
     }, [titleValue]);
+
+    const isFeatured = useStore(form.store, (s) => s.values.isFeatured);
+    console.log(isFeatured);
 
     return (
       <Card className="sticky top-6 h-fit">
@@ -446,6 +450,22 @@ const JobDetails = withForm({
                 </Select>
 
                 <field.FormError />
+              </field.FormField>
+            )}
+          />
+          <form.AppField
+            name="isFeatured"
+            children={(field) => (
+              <field.FormField>
+                <div className="flex gap-3">
+                  <field.FormCheckbox />
+                  <field.FormLabel>Is Featured?</field.FormLabel>
+                </div>
+                <field.FormError />
+                <field.FormDescription>
+                  When it's featured, it will be displayed prominently on the
+                  homepage.
+                </field.FormDescription>
               </field.FormField>
             )}
           />
